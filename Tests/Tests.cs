@@ -1,31 +1,15 @@
-﻿using Core;
-using static Tests.Locators;
+﻿using Business;
+using Core;
 
 namespace Tests;
 
 [Parallelizable(ParallelScope.All)]
-[FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
 [TestFixture]
 public class Tests
 {
+    private IConfig Config { get; } = new JsonFileConfig();
+
     private const int ImplicitWaitTimeInSeconds = 10;
-
-    private WebDriverHelper Driver;
-
-    [SetUp]
-    public void SetUp()
-    {
-        var logger = new TextWriterLogger(TestContext.Out);
-        Driver = new WebDriverHelper(Config.CreateDriver, logger);
-        Driver.SetImplicitWaitInSeconds(ImplicitWaitTimeInSeconds);
-        Driver.NavigateToUrl(Config.Url);
-    }
-
-    [TearDown]
-    public void TearDown()
-    {
-        ((IDisposable)Driver).Dispose();
-    }
 
     [TestCase("C++", Country.Poland)]
     [TestCase("JavaScript", Country.Mexico)]
@@ -34,14 +18,16 @@ public class Tests
         string programmingLanguage,
         Country country)
     {
-        Driver.Click(CareersBtnLocator);
-        Driver.Click(StartYourSearchBtnLocator);
-        Driver.SendKeysWithEnter(RoleOrKeywordInputLocator, programmingLanguage);
-        Driver.SendKeysWithEnter(CountryInputLocator, country.ToString());
-        Driver.Click(RemoteCheckboxLocator, ClickCookies);
-        Driver.Click(PositionSearchBtnLocator);
-        Driver.Click(LatestResultExpanderLocator);
-        bool result = Driver.DoesContainText(LatestResultDescriptionLocator, programmingLanguage);
+        // Arrange
+        using var driver = GetDriver();
+        var homePage = new HomePage(driver, Config.Data.MainPageUrl);
+        // Act
+        var result = homePage
+            .ClickCareersButton()
+            .ClickStartYourSearchHereButton()
+            .SearchForRemotePosition(programmingLanguage, country.ToString())
+            .DoesLatestResultContainKeyword(programmingLanguage);
+        // Assert
         Assert.That(result, Is.True);
     }
 
@@ -51,15 +37,25 @@ public class Tests
     public void GlobalSearch_WithWord_AllLinkTextsContainWord(
         string input)
     {
-        Driver.Click(MagnifierBtnLocator);
-        Driver.SendKeys(SearchInputLocator, input);
-        Driver.Click(SearchBtnLocator);
-        bool result = Driver.DoAllContainText(ArticlesLocator, input);
+        // Arrange
+        using var driver = GetDriver();
+        var homePage = new HomePage(driver, Config.Data.MainPageUrl);
+        // Act
+        var result = homePage
+            .ClickMagnifierButton()
+            .EnterSearchInput(input)
+            .ClickSearchButton()
+            .DoAllResultsContainInput(input);
+        // Assert
         Assert.That(result, Is.True);
     }
 
-    private void ClickCookies()
+    private IWebDriverWrapper GetDriver()
     {
-        Driver.Click(CookiesBtnLocator);
+        var logger = new TextWriterLogger(TestContext.Out);
+        var driver = WebDriverFactory.CreateDriver(Config.Data);
+        var driverWrapper = new WebDriverWrapper(driver, logger);
+        driverWrapper.SetImplicitWaitInSeconds(ImplicitWaitTimeInSeconds);
+        return driverWrapper;
     }
 }

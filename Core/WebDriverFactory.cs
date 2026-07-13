@@ -5,12 +5,12 @@ namespace Core;
 
 public static class WebDriverFactory
 {
-    public static IWebDriver CreateDriver(Browser browser, BrowserSettings settings)
+    public static IWebDriver CreateDriver(ConfigData data)
     {
-        return browser switch
+        return data.Browser switch
         {
-            Browser.Chrome => CreateChromeDriver(settings),
-            _ => throw new InvalidOperationException($"Browser type \"{browser}\" not recognized.")
+            Browser.Chrome => CreateChromeDriver(data.BrowserSettings),
+            _ => throw new InvalidOperationException($"Browser type \"{data.Browser}\" not recognized.")
         };
     }
 

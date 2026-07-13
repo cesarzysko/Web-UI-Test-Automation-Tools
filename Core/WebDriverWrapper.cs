@@ -6,18 +6,18 @@ using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace Core;
 
-public sealed partial class WebDriverHelper
-    : IDisposable
+public sealed partial class WebDriverWrapper
+    : IWebDriverWrapper
 {
     private const int PageLoadTimeoutSeconds = 5;
 
     private readonly ILogger Logger;
     private readonly IWebDriver Driver;
 
-    public WebDriverHelper(Func<IWebDriver> driverFactory, ILogger? logger)
+    public WebDriverWrapper(IWebDriver driver, ILogger? logger)
     {
+        Driver = driver;
         Logger = logger ?? NullLogger.Instance;
-        Driver = driverFactory.Invoke();
     }
 
     public void NavigateToUrl(string url)
@@ -71,7 +71,7 @@ public sealed partial class WebDriverHelper
         }
     }
 
-    public void Click(By locator, Action onClickIntercepted)
+    public void ClickWithInterceptFallback(By locator, Action onClickIntercepted)
     {
         try
         {
