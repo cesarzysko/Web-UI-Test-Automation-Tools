@@ -29,4 +29,10 @@ public sealed class HomePage
         Driver.Click(MagnifierBtnLocator);
         return new HomeSearchWidget(Driver);
     }
+
+    public HomeFooterWidget GoToFooter()
+    {
+        Driver.ScrollToElement(By.ClassName("copyright"));
+        return new HomeFooterWidget(Driver);
+    }
 }

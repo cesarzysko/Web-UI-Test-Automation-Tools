@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using OpenQA.Selenium;
@@ -13,11 +14,13 @@ public sealed partial class WebDriverWrapper
 
     private readonly ILogger Logger;
     private readonly IWebDriver Driver;
+    private readonly string DownloadPath;
 
-    public WebDriverWrapper(IWebDriver driver, ILogger? logger)
+    public WebDriverWrapper(IWebDriver driver, ILogger? logger, string? downloadPath)
     {
         Driver = driver;
         Logger = logger ?? NullLogger.Instance;
+        DownloadPath = downloadPath ?? DownloadUtils.GetNewDownloadPath();
     }
 
     public void NavigateToUrl(string url)
@@ -84,6 +87,38 @@ public sealed partial class WebDriverWrapper
         }
     }
 
+    public void ClickJS(By locator)
+    {
+        var js = ((IJavaScriptExecutor)Driver);
+        var elem = Find(locator);
+        js.ExecuteScript("arguments[0].click();", elem);
+    }
+
+    public void ScrollToElement(By locator)
+    {
+        var js = (IJavaScriptExecutor)Driver;
+        int previousHeight = -1;
+        int currentTries = 0;
+        const int TriesUntilStable = 5;
+        while (currentTries < TriesUntilStable)
+        {
+            int currentHeight = Convert.ToInt32(js.ExecuteScript("return document.scrollingElement.scrollHeight"));
+            if (currentHeight == previousHeight)
+            {
+                currentTries++;
+            }
+            else
+            {
+                previousHeight = currentHeight;
+                currentTries = 0;
+            }
+
+            Thread.Sleep(200);
+        }
+
+        js.ExecuteScript("arguments[0].scrollIntoView({block:'end'});", Find(locator));
+    }
+
     public void SendKeysWithEnter(By locator, string input)
     {
         SendKeys(locator, input + Keys.Enter);
@@ -92,6 +127,21 @@ public sealed partial class WebDriverWrapper
     public void SendKeys(By locator, string input)
     {
         Find(locator).SendKeys(input);
+    }
+
+    public bool IsFileDownloaded(string fileName, TimeSpan timeout)
+    {
+        string filePath = Path.Combine(DownloadPath, fileName);
+        Stopwatch sw = Stopwatch.StartNew();
+        while (sw.Elapsed < timeout)
+        {
+            if (File.Exists(filePath))
+            {
+                return true;
+            }
+        }
+
+        return File.Exists(filePath);
     }
 
     private void SetImplicitWaitInTimeSpan(TimeSpan timeSpan)
