@@ -2,7 +2,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Core;
 
-public sealed class JsonFileConfig
+public sealed class ConfigurationFileConfig
     : IConfig
 {
     public ConfigData Data { get; } = new ConfigurationBuilder()

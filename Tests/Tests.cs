@@ -12,7 +12,7 @@ public class Tests
     private const int ImplicitWaitTimeInSeconds = 5;
 
     private static readonly TimeSpan DownloadTimeout = TimeSpan.FromSeconds(5);
-    private static readonly IConfig Config = new JsonFileConfig();
+    private static readonly IConfig Config = new ConfigurationFileConfig();
 
     [TestCase("C++", Country.Poland)]
     [TestCase("JavaScript", Country.Mexico)]
