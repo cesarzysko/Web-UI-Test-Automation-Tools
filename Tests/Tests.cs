@@ -7,7 +7,7 @@ namespace Tests;
 
 [Parallelizable(ParallelScope.All)]
 [TestFixture]
-public class Tests
+public sealed class Tests
 {
     private const int ImplicitWaitTimeInSeconds = 5;
 
