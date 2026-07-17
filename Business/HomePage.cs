@@ -12,6 +12,9 @@ public sealed class HomePage
     private static readonly By MagnifierBtnLocator =
         By.ClassName("header-search__button");
 
+    private static readonly By InsightsBtnLocator =
+        By.LinkText("Insights");
+
     public HomePage(IWebDriverWrapper driver, string url)
         : base(driver)
     {
@@ -34,5 +37,11 @@ public sealed class HomePage
     {
         Driver.ScrollToElement(By.ClassName("copyright"));
         return new HomeFooterWidget(Driver);
+    }
+
+    public HomeInsightsPage ClickInsightsButton()
+    {
+        Driver.Click(InsightsBtnLocator);
+        return new HomeInsightsPage(Driver);
     }
 }

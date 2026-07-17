@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
@@ -47,6 +48,16 @@ public sealed partial class WebDriverWrapper
             LogTextNotFound(text, str);
             return false;
         });
+    }
+
+    public string GetText(By locator)
+    {
+        return Find(locator).Text;
+    }
+
+    public int GetElementWidth(By locator)
+    {
+        return Find(locator).Size.Width;
     }
 
     public bool DoesContainText(By locator, string text)
@@ -117,6 +128,29 @@ public sealed partial class WebDriverWrapper
         }
 
         js.ExecuteScript("arguments[0].scrollIntoView({block:'end'});", Find(locator));
+    }
+
+    public void SwipeElement(By locator, int by, int msDuration, int msPause)
+    {
+        var elem = Find(locator);
+        var pointer = new PointerInputDevice(PointerKind.Mouse);
+        var sequence = new ActionSequence(pointer, 0);
+
+        sequence.AddAction(pointer.CreatePointerMove(elem, 0, 0, TimeSpan.Zero));
+        sequence.AddAction(pointer.CreatePointerDown(MouseButton.Left));
+
+        var deltaTimeSpan = TimeSpan.FromMilliseconds(10);
+        var deltaToTotal = deltaTimeSpan.TotalMilliseconds / msDuration;
+        var byDelta = (int)(deltaToTotal * by);
+
+        for (int current = 0; Math.Abs(current) < Math.Abs(by); current += byDelta)
+        {
+            sequence.AddAction(pointer.CreatePointerMove(CoordinateOrigin.Pointer, byDelta, 0, deltaTimeSpan));
+        }
+
+        sequence.AddAction(pointer.CreatePointerUp(MouseButton.Left));
+        sequence.AddAction(pointer.CreatePointerMove(elem, 0, 0, TimeSpan.FromMilliseconds(msPause)));
+        ((IActionExecutor)Driver).PerformActions([sequence]);
     }
 
     public void SendKeysWithEnter(By locator, string input)

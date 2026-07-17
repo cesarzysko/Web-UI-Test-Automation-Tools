@@ -9,10 +9,13 @@ public interface IWebDriverWrapper
     void SetImplicitWaitInSeconds(float seconds);
     bool DoAllContainText(By locator, string text);
     bool DoesContainText(By locator, string text);
+    string GetText(By locator);
+    int GetElementWidth(By locator);
     void Click(By locator);
     void ClickJS(By locator);
     void ClickWithInterceptFallback(By locator, Action onClickIntercepted);
     void ScrollToElement(By locator);
+    void SwipeElement(By locator, int by, int msDuration, int msPause);
     void SendKeysWithEnter(By locator, string input);
     void SendKeys(By locator, string input);
     bool IsFileDownloaded(string fileName, TimeSpan timeout);

@@ -9,7 +9,7 @@ namespace Tests;
 [TestFixture]
 public class Tests
 {
-    private const int ImplicitWaitTimeInSeconds = 10;
+    private const int ImplicitWaitTimeInSeconds = 5;
 
     private static readonly TimeSpan DownloadTimeout = TimeSpan.FromSeconds(5);
     private static readonly IConfig Config = new JsonFileConfig();
@@ -65,6 +65,24 @@ public class Tests
             .GoToFooter()
             .ClickCodeOfEthicalConductButton();
         var result = driver.IsFileDownloaded(fileName, DownloadTimeout);
+        // Assert
+        Assert.That(result, Is.True);
+    }
+
+    [Test]
+    public void ArticleCarousel_ReadMore_ArticleNameMatchesCarousel(
+        [Range(0, 4)] int carouselSwipes)
+    {
+        // Arrange
+        using var driver = GetDriver();
+        var homePage = new HomePage(driver, Config.Data.MainPageUrl);
+        // Act
+        var result = homePage
+            .ClickInsightsButton()
+            .SwipeCarousel(carouselSwipes)
+            .GetCurrentArticleName(out string name)
+            .ClickReadMoreButtonForCurrentArticle()
+            .DoesArticleNameMatch(name);
         // Assert
         Assert.That(result, Is.True);
     }
