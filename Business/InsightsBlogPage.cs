@@ -26,9 +26,9 @@ public sealed class InsightsBlogPage
                 }
                 catch (NoSuchElementException)
                 {
-                    return null;
+                    return string.Empty;
                 }
             })
-            .FirstOrDefault(string.IsNullOrWhiteSpace, string.Empty)!;
+            .FirstOrDefault(s => !string.IsNullOrWhiteSpace(s), string.Empty);
     }
 }
