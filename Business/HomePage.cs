@@ -15,10 +15,10 @@ public sealed class HomePage
     private static readonly By InsightsBtnLocator =
         By.LinkText("Insights");
 
-    public HomePage(IWebDriverWrapper driver, string url)
+    public HomePage(IWebDriverWrapper driver, IConfig config)
         : base(driver)
     {
-        Driver.NavigateToUrl(url);
+        Driver.NavigateToUrl(config.Data.MainPageUrl);
     }
 
     public HomeCareersPage ClickCareersButton()

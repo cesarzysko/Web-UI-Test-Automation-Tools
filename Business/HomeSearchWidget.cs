@@ -12,7 +12,7 @@ public sealed class HomeSearchWidget
     private static readonly By SearchBtnLocator =
         By.ClassName("custom-search-button");
 
-    internal HomeSearchWidget(IWebDriverWrapper driver)
+    public HomeSearchWidget(IWebDriverWrapper driver)
         : base(driver) { }
 
     public HomeSearchWidget EnterSearchInput(string input)

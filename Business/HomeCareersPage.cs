@@ -9,8 +9,8 @@ public sealed class HomeCareersPage
     private static readonly By StartYourSearchBtnLocator =
         By.PartialLinkText("START YOUR SEARCH");
 
-    internal HomeCareersPage(IWebDriverWrapper driver)
-        : base(driver) {}
+    public HomeCareersPage(IWebDriverWrapper driver)
+        : base(driver) { }
 
     public CareersPage ClickStartYourSearchHereButton()
     {

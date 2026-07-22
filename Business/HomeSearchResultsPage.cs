@@ -9,7 +9,7 @@ public sealed class HomeSearchResultsPage
     private static readonly By ArticlesLocator = // language=CSS
         By.CssSelector("div.search-results__items article");
 
-    internal HomeSearchResultsPage(IWebDriverWrapper driver)
+    public HomeSearchResultsPage(IWebDriverWrapper driver)
         : base(driver) { }
 
     public bool DoAllResultsContainInput(string input)

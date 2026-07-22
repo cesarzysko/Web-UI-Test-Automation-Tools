@@ -27,7 +27,7 @@ public sealed class CareersPage
     private static readonly By LatestResultDescriptionLocator = // language=XPath
         By.XPath("//div[contains(@class, 'JobCard_accordionHeader')]");
 
-    internal CareersPage(IWebDriverWrapper driver)
+    public CareersPage(IWebDriverWrapper driver)
         : base(driver) { }
 
     public CareersPage SearchForRemotePosition(string keyword, string country)

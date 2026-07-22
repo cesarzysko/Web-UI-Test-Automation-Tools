@@ -17,11 +17,11 @@ public sealed partial class WebDriverWrapper
     private readonly IWebDriver Driver;
     private readonly string DownloadPath;
 
-    public WebDriverWrapper(IWebDriver driver, ILogger? logger, string? downloadPath)
+    public WebDriverWrapper(IWebDriver driver, ILogger? logger, IDownloadPathGetter? downloadPath)
     {
         Driver = driver;
         Logger = logger ?? NullLogger.Instance;
-        DownloadPath = downloadPath ?? DownloadUtils.GetNewDownloadPath();
+        DownloadPath = downloadPath?.GetDownloadPath() ?? string.Empty;
     }
 
     public void NavigateToUrl(string url)

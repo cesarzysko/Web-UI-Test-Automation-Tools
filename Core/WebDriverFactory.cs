@@ -3,27 +3,43 @@ using OpenQA.Selenium.Chrome;
 
 namespace Core;
 
-public static class WebDriverFactory
+public sealed class WebDriverFactory
 {
-    public static IWebDriver CreateDriver(ConfigData data, string downloadPath)
+    private readonly ConfigData data;
+    private readonly string downloadPath;
+
+    public WebDriverFactory(IConfig config, IDownloadPathGetter downloadPathGetter)
+    {
+        data = config.Data;
+        downloadPath = downloadPathGetter.GetDownloadPath();
+    }
+
+    public IWebDriver CreateDriver()
     {
         return data.Browser switch
         {
-            Browser.Chrome => CreateChromeDriver(data.BrowserSettings, downloadPath),
+            Browser.Chrome => CreateChromeDriver(),
             _ => throw new InvalidOperationException($"Browser type \"{data.Browser}\" not recognized.")
         };
     }
 
-    private static ChromeDriver CreateChromeDriver(BrowserSettings settings, string downloadPath)
+    private ChromeDriver CreateChromeDriver()
     {
-        return new ChromeDriver(CreateChromeOptions(settings, downloadPath));
+        var driver = new ChromeDriver(CreateChromeOptions());
+        SetImplicitWaitTime(driver);
+        return driver;
     }
 
-    private static ChromeOptions CreateChromeOptions(BrowserSettings settings, string downloadPath)
+    private ChromeOptions CreateChromeOptions()
     {
         ChromeOptions options = new ChromeOptions();
-        options.HandleMaximized(settings.Maximized);
+        options.HandleMaximized(data.BrowserSettings.Maximized);
         options.HandleDownloads(downloadPath);
         return options;
+    }
+
+    private void SetImplicitWaitTime(IWebDriver driver)
+    {
+        driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(data.BrowserSettings.ImplicitWaitTimeSeconds);
     }
 }
