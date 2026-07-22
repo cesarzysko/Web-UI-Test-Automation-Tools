@@ -17,13 +17,13 @@ public sealed class Tests
         Country country)
     {
         // Act
-        var result = HomePage
+        var latestResult = HomePage
             .ClickCareersButton()
             .ClickStartYourSearchHereButton()
             .SearchForRemotePosition(programmingLanguage, country.ToString())
-            .DoesLatestResultContainKeyword(programmingLanguage);
+            .GetLatestResult();
         // Assert
-        Assert.That(result, Is.True);
+        Assert.That(latestResult, Does.Contain(programmingLanguage).IgnoreCase);
     }
 
     [TestCase("BLOCKCHAIN")]
@@ -33,13 +33,19 @@ public sealed class Tests
         string input)
     {
         // Act
-        var result = HomePage
+        var results = HomePage
             .ClickMagnifierButton()
             .EnterSearchInput(input)
             .ClickSearchButton()
-            .DoAllResultsContainInput(input);
+            .GetAllResults();
         // Assert
-        Assert.That(result, Is.True);
+        var nonMatching = results
+            .Where(s => !s.Contains(input, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+        Assert.That(nonMatching, Is.Empty,
+            $"Expected all {results.Count} search results for \"{input}\" to contain that word, " +
+            $"but {nonMatching.Count} did not:\n" +
+            $"{string.Join('\n', nonMatching)}\n");
     }
 
     [TestCase("Code-Of-Conduct_01_26.pdf")]
@@ -47,26 +53,25 @@ public sealed class Tests
         string fileName)
     {
         // Act
-        HomePage
-            .GoToFooter()
+        HomePage.GoToFooter()
             .ClickCodeOfEthicalConductButton();
-        var result = Driver.IsFileDownloaded(fileName, DownloadTimeout);
+        var isDownloaded = Driver.IsFileDownloaded(fileName, DownloadTimeout);
         // Assert
-        Assert.That(result, Is.True);
+        Assert.That(isDownloaded, Is.True);
     }
 
     [Test]
-    public void ArticleCarousel_ReadMore_ArticleNameMatchesCarousel(
+    public void ArticleCarousel_ReadMore_OpenedArticleNameMatchesCarouselArticle(
         [Range(0, 4)] int carouselSwipes)
     {
         // Act
-        var result = HomePage
+        var articleName = HomePage
             .ClickInsightsButton()
             .SwipeCarousel(carouselSwipes)
             .GetCurrentArticleName(out string name)
             .ClickReadMoreButtonForCurrentArticle()
-            .DoesArticleNameMatch(name);
+            .GetArticleName();
         // Assert
-        Assert.That(result, Is.True);
+        Assert.That(articleName, Does.Contain(name).IgnoreCase);
     }
 }

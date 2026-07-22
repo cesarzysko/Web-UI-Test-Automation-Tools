@@ -6,10 +6,8 @@ public interface IWebDriverWrapper
     : IDisposable
 {
     void NavigateToUrl(string url);
-    void SetImplicitWaitInSeconds(float seconds);
-    bool DoAllContainText(By locator, string text);
-    bool DoesContainText(By locator, string text);
     string GetText(By locator);
+    IReadOnlyList<string> GetTexts(By locator);
     int GetElementWidth(By locator);
     void Click(By locator);
     void ClickJS(By locator);

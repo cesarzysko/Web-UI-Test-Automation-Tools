@@ -12,8 +12,8 @@ public sealed class HomeSearchResultsPage
     public HomeSearchResultsPage(IWebDriverWrapper driver)
         : base(driver) { }
 
-    public bool DoAllResultsContainInput(string input)
+    public IReadOnlyList<string> GetAllResults()
     {
-        return Driver.DoAllContainText(ArticlesLocator, input);
+        return Driver.GetTexts(ArticlesLocator);
     }
 }

@@ -15,19 +15,20 @@ public sealed class InsightsBlogPage
     public InsightsBlogPage(IWebDriverWrapper driver)
         : base(driver) { }
 
-    public bool DoesArticleNameMatch(string name)
+    public string GetArticleName()
     {
-        By[] headers = [HeaderLocator, AltHeaderLocator];
-        return headers.Any(h =>
-        {
-            try
+        By[] headerLocators = [HeaderLocator, AltHeaderLocator];
+        return headerLocators.Select(locator =>
             {
-                return Driver.DoesContainText(h, name);
-            }
-            catch (NoSuchElementException)
-            {
-                return false;
-            }
-        });
+                try
+                {
+                    return Driver.GetText(locator);
+                }
+                catch (NoSuchElementException)
+                {
+                    return null;
+                }
+            })
+            .FirstOrDefault(string.IsNullOrWhiteSpace, string.Empty)!;
     }
 }

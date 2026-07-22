@@ -29,47 +29,19 @@ public sealed partial class WebDriverWrapper
         Driver.Navigate().GoToUrl(url);
     }
 
-    public void SetImplicitWaitInSeconds(float seconds)
-    {
-        Driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(seconds);
-    }
-
-    public bool DoAllContainText(By locator, string text)
-    {
-        return FindAll(locator).All(elem =>
-        {
-            string str = elem.Text;
-            bool check = StringUtils.DoesContainText(str, text);
-            if (check)
-            {
-                return true;
-            }
-
-            LogTextNotFound(text, str);
-            return false;
-        });
-    }
-
     public string GetText(By locator)
     {
         return Find(locator).Text;
     }
 
+    public IReadOnlyList<string> GetTexts(By locator)
+    {
+        return FindAll(locator).Select(elem => elem.Text).ToList();
+    }
+
     public int GetElementWidth(By locator)
     {
         return Find(locator).Size.Width;
-    }
-
-    public bool DoesContainText(By locator, string text)
-    {
-        string str = Find(locator).Text;
-        bool check = StringUtils.DoesContainText(str, text);
-        if (!check)
-        {
-            LogTextNotFound(text, str);
-        }
-
-        return check;
     }
 
     public void Click(By locator)

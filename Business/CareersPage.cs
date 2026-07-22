@@ -39,10 +39,10 @@ public sealed class CareersPage
         return this;
     }
 
-    public bool DoesLatestResultContainKeyword(string keyword)
+    public string GetLatestResult()
     {
         ExpandLatestResult();
-        return Driver.DoesContainText(LatestResultDescriptionLocator, keyword);
+        return Driver.GetText(LatestResultDescriptionLocator);
     }
 
     private void ExpandLatestResult()
