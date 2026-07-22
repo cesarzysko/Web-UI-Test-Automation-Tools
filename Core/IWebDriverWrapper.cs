@@ -13,7 +13,7 @@ public interface IWebDriverWrapper
     void ClickJS(By locator);
     void ClickWithInterceptFallback(By locator, Action onClickIntercepted);
     void ScrollToElement(By locator);
-    void SwipeElement(By locator, int by, int msDuration, int msPause);
+    void SwipeElementHorizontally(By locator, int by, int msDuration, int msPause);
     void SendKeysWithEnter(By locator, string input);
     void SendKeys(By locator, string input);
     bool IsFileDownloaded(string fileName, TimeSpan timeout);

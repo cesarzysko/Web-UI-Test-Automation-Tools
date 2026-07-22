@@ -30,7 +30,7 @@ public sealed class HomeInsightsPage
         var swipeLength = (int)(elemWidth * 0.4f);
         for (int i = 0; i < swipes; ++i)
         {
-            Driver.SwipeElement(CarouselLocator, -swipeLength, SwipeDurationMs, AfterSwipePauseMs);
+            Driver.SwipeElementHorizontally(CarouselLocator, -swipeLength, SwipeDurationMs, AfterSwipePauseMs);
         }
 
         return this;

@@ -52,6 +52,7 @@ public sealed partial class WebDriverWrapper
         }
         catch (StaleElementReferenceException)
         {
+            LogStaleElementRetry(locator.ToString());
             WaitUntilPageLoaded();
             Find(locator).Click();
         }
@@ -65,6 +66,7 @@ public sealed partial class WebDriverWrapper
         }
         catch (ElementClickInterceptedException)
         {
+            LogClickIntercepted(locator.ToString());
             onClickIntercepted.Invoke();
             Click(locator);
         }
@@ -79,10 +81,13 @@ public sealed partial class WebDriverWrapper
 
     public void ScrollToElement(By locator)
     {
+        const int TriesUntilStable = 5;
+        const int TrySleepMs = 200;
+
         var js = (IJavaScriptExecutor)Driver;
         int previousHeight = -1;
         int currentTries = 0;
-        const int TriesUntilStable = 5;
+        Stopwatch sw = Stopwatch.StartNew();
         while (currentTries < TriesUntilStable)
         {
             int currentHeight = Convert.ToInt32(js.ExecuteScript("return document.scrollingElement.scrollHeight"));
@@ -96,13 +101,15 @@ public sealed partial class WebDriverWrapper
                 currentTries = 0;
             }
 
-            Thread.Sleep(200);
+            Thread.Sleep(TrySleepMs);
         }
 
+        sw.Stop();
+        LogScrollStabilized(sw.Elapsed.TotalMilliseconds);
         js.ExecuteScript("arguments[0].scrollIntoView({block:'end'});", Find(locator));
     }
 
-    public void SwipeElement(By locator, int by, int msDuration, int msPause)
+    public void SwipeElementHorizontally(By locator, int by, int msDuration, int msPause)
     {
         var elem = Find(locator);
         var pointer = new PointerInputDevice(PointerKind.Mouse);
@@ -141,13 +148,23 @@ public sealed partial class WebDriverWrapper
         Stopwatch sw = Stopwatch.StartNew();
         while (sw.Elapsed < timeout)
         {
-            if (File.Exists(filePath))
+            if (!File.Exists(filePath))
             {
-                return true;
+                continue;
             }
+
+            LogFileDownloaded(filePath, sw.Elapsed.TotalSeconds);
+            return true;
         }
 
-        return File.Exists(filePath);
+        if (File.Exists(filePath))
+        {
+            LogFileDownloaded(filePath, timeout.TotalSeconds);
+            return true;
+        }
+
+        LogFileNotDownloaded(filePath, timeout.TotalSeconds);
+        return false;
     }
 
     private void SetImplicitWaitInTimeSpan(TimeSpan timeSpan)
@@ -185,8 +202,31 @@ public sealed partial class WebDriverWrapper
         }
     }
 
-    [LoggerMessage(Level = LogLevel.Warning, Message = "Could not find \"{Text}\" in \"{Str}\".")]
-    private partial void LogTextNotFound(string text, string str);
+    [LoggerMessage(
+        Level = LogLevel.Warning,
+        Message = "Element \"{Locator}\" was stale - Waiting for page load and retrying.")]
+    private partial void LogStaleElementRetry(string locator);
+
+    [LoggerMessage(
+        Level = LogLevel.Warning,
+        Message = "Click on \"{Locator}\" was intercepted - Invoking fallback and retrying.")]
+    private partial void LogClickIntercepted(string locator);
+
+    [LoggerMessage(
+        Level = LogLevel.Warning,
+        Message = "File \"{FileName}\" was not found after waiting {TimeoutSeconds}s.")]
+    private partial void LogFileNotDownloaded(string fileName, double timeoutSeconds);
+
+    [LoggerMessage(
+        Level = LogLevel.Information,
+        Message = "File \"{FileName}\" was found after waiting {Seconds}s.")]
+    private partial void LogFileDownloaded(string fileName, double seconds);
+
+    [LoggerMessage(
+        Level = LogLevel.Debug,
+        Message = "Scroll height stabilized after {MilliSeconds}ms.")]
+    private partial void LogScrollStabilized(double milliSeconds);
+
 
     void IDisposable.Dispose()
     {
