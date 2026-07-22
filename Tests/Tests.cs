@@ -39,9 +39,7 @@ public sealed class Tests
             .ClickSearchButton()
             .GetAllResults();
         // Assert
-        var nonMatching = results
-            .Where(s => !s.Contains(input, StringComparison.OrdinalIgnoreCase))
-            .ToList();
+        var nonMatching = results.WhereNotContains(input);
         Assert.That(nonMatching, Is.Empty,
             $"Expected all {results.Count} search results for \"{input}\" to contain that word, " +
             $"but {nonMatching.Count} did not:\n" +

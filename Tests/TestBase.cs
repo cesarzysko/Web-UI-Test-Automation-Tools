@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using Business;
 using Core;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,15 +15,8 @@ public abstract class TestBase
     protected HomePage HomePage =>
         testScope.ServiceProvider.GetRequiredService<HomePage>();
 
-    [SuppressMessage(
-        "Structure",
-        "NUnit1032:An IDisposable field/property should be Disposed in a TearDown method",
-        Justification = "Disposed by DI scope in TearDown.")]
-    protected IWebDriverWrapper Driver
-    {
-        get;
-        private set => field = value ?? throw new ArgumentNullException(nameof(value));
-    } = null!;
+    protected IWebDriverWrapper Driver =>
+        testScope.ServiceProvider.GetRequiredService<IWebDriverWrapper>();
 
     [OneTimeSetUp]
     public static void OneTimeSetUp()
@@ -50,7 +42,6 @@ public abstract class TestBase
     public void SetUp()
     {
         testScope = serviceProvider.CreateScope();
-        Driver = testScope.ServiceProvider.GetRequiredService<IWebDriverWrapper>();
     }
 
     [TearDown]
