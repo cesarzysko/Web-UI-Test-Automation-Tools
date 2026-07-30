@@ -14,6 +14,7 @@ public class HomeFooterWidget
 
     public void ClickCodeOfEthicalConductButton()
     {
+        Log.Info("Clicking the \"Code of Ethical Conduct\" button.");
         Driver.ClickJS(CodeOfEthicalConductBtnLocator);
     }
 }

@@ -18,17 +18,28 @@ public sealed class InsightsBlogPage
     public string GetArticleName()
     {
         By[] headerLocators = [HeaderLocator, AltHeaderLocator];
-        return headerLocators.Select(locator =>
+        var name = headerLocators.Select(locator =>
             {
                 try
                 {
-                    return Driver.GetText(locator);
+                    Log.Info("Trying to read the article name.");
+                    var name = Driver.GetText(locator);
+                    Log.InfoFormat("Found article name \"{0}\".", name);
+                    return name;
                 }
                 catch (NoSuchElementException)
                 {
+                    Log.InfoFormat("Could not find an article name using the locator \"{0}\".", locator);
                     return string.Empty;
                 }
             })
-            .FirstOrDefault(s => !string.IsNullOrWhiteSpace(s), string.Empty);
+            .FirstOrDefault(s => !string.IsNullOrWhiteSpace(s), string.Empty)!;
+
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            Log.Warn("Could not find the article name using any of the available locators.");
+        }
+
+        return name;
     }
 }

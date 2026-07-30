@@ -14,6 +14,7 @@ public sealed class HomeCareersPage
 
     public CareersPage ClickStartYourSearchHereButton()
     {
+        Log.Info("Clicking the \"START YOUR SEARCH HERE\" button.");
         Driver.Click(StartYourSearchBtnLocator);
         return new CareersPage(Driver);
     }

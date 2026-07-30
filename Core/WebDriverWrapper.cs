@@ -1,26 +1,24 @@
 using System.Diagnostics;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
+using log4net;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
-using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace Core;
 
-public sealed partial class WebDriverWrapper
+public sealed class WebDriverWrapper
     : IWebDriverWrapper
 {
     private const int PageLoadTimeoutSeconds = 5;
 
-    private readonly ILogger Logger;
     private readonly IWebDriver Driver;
     private readonly string DownloadPath;
 
-    public WebDriverWrapper(IWebDriver driver, ILogger? logger, IDownloadPathGetter? downloadPath)
+    private static ILog Log => LogManager.GetLogger(typeof(WebDriverWrapper));
+
+    public WebDriverWrapper(IWebDriver driver, IDownloadPathGetter? downloadPath)
     {
         Driver = driver;
-        Logger = logger ?? NullLogger.Instance;
         DownloadPath = downloadPath?.GetDownloadPath() ?? string.Empty;
     }
 
@@ -48,12 +46,14 @@ public sealed partial class WebDriverWrapper
     {
         try
         {
+            Log.InfoFormat("Trying to click the web element with locator \"{0}\".", locator);
             Find(locator).Click();
         }
         catch (StaleElementReferenceException)
         {
-            LogStaleElementRetry(locator.ToString());
+            Log.WarnFormat("Web element with the locator \"{0}\" was stale.", locator);
             WaitUntilPageLoaded();
+            Log.InfoFormat("Retrying to click the web element with locator \"{0}\".", locator);
             Find(locator).Click();
         }
     }
@@ -66,7 +66,7 @@ public sealed partial class WebDriverWrapper
         }
         catch (ElementClickInterceptedException)
         {
-            LogClickIntercepted(locator.ToString());
+            Log.WarnFormat("Click on web element with locator \"{0}\" was intercepted. Invoking fallback.", locator);
             onClickIntercepted.Invoke();
             Click(locator);
         }
@@ -74,6 +74,7 @@ public sealed partial class WebDriverWrapper
 
     public void ClickJS(By locator)
     {
+        Log.InfoFormat("Trying to click the web element with locator \"{0}\".", locator);
         var js = ((IJavaScriptExecutor)Driver);
         var elem = Find(locator);
         js.ExecuteScript("arguments[0].click();", elem);
@@ -105,12 +106,14 @@ public sealed partial class WebDriverWrapper
         }
 
         sw.Stop();
-        LogScrollStabilized(sw.Elapsed.TotalMilliseconds);
+        Log.InfoFormat("Scroll height stabilized after {0}ms.", sw.Elapsed.TotalMilliseconds);
+        Log.InfoFormat("Scrolling down to web element with locator \"{0}\".", locator);
         js.ExecuteScript("arguments[0].scrollIntoView({block:'end'});", Find(locator));
     }
 
     public void SwipeElementHorizontally(By locator, int by, int msDuration, int msPause)
     {
+        Log.InfoFormat("Swiping web element with locator \"{0}\" horizontally by {1}px over {2}ms.", locator, by, msDuration);
         var elem = Find(locator);
         var pointer = new PointerInputDevice(PointerKind.Mouse);
         var sequence = new ActionSequence(pointer, 0);
@@ -130,6 +133,7 @@ public sealed partial class WebDriverWrapper
         sequence.AddAction(pointer.CreatePointerUp(MouseButton.Left));
         sequence.AddAction(pointer.CreatePointerMove(elem, 0, 0, TimeSpan.FromMilliseconds(msPause)));
         ((IActionExecutor)Driver).PerformActions([sequence]);
+        Log.InfoFormat("Swiping web element with locator \"{0}\" completed.", locator);
     }
 
     public void SendKeysWithEnter(By locator, string input)
@@ -139,6 +143,7 @@ public sealed partial class WebDriverWrapper
 
     public void SendKeys(By locator, string input)
     {
+        Log.InfoFormat("Sending \"{0}\" keys to web element with locator \"{1}\".", input, locator);
         Find(locator).SendKeys(input);
     }
 
@@ -153,17 +158,17 @@ public sealed partial class WebDriverWrapper
                 continue;
             }
 
-            LogFileDownloaded(filePath, sw.Elapsed.TotalSeconds);
+            Log.InfoFormat("File \"{0}\" was found after waiting for {1} seconds.", filePath, sw.Elapsed.TotalSeconds);
             return true;
         }
 
         if (File.Exists(filePath))
         {
-            LogFileDownloaded(filePath, timeout.TotalSeconds);
+            Log.InfoFormat("File \"{0}\" was found after waiting for {1} seconds.", filePath, timeout.TotalSeconds);
             return true;
         }
 
-        LogFileNotDownloaded(filePath, timeout.TotalSeconds);
+        Log.WarnFormat("File \"{0}\" was not found after waiting for {1} seconds.", filePath, timeout.TotalSeconds);
         return false;
     }
 
@@ -174,12 +179,27 @@ public sealed partial class WebDriverWrapper
 
     private IReadOnlyList<IWebElement> FindAll(By locator)
     {
-        return Driver.FindElements(locator);
+        Log.InfoFormat("Trying to find all web elements with locator \"{0}\".", locator);
+        var elems = Driver.FindElements(locator);
+        Log.InfoFormat("Count of found web elements with locator \"{0}\": \"{1}\".", locator, elems.Count);
+        return elems;
     }
 
     private IWebElement Find(By locator)
     {
-        return Driver.FindElement(locator);
+        try
+        {
+            Log.InfoFormat("Trying to find web element with locator \"{0}\".", locator);
+            var elem = Driver.FindElement(locator);
+            Log.InfoFormat("Web element with locator \"{0}\" successfully found.", locator);
+            return elem;
+        }
+        catch (Exception)
+        {
+            Log.WarnFormat("Could not find web element with locator \"{0}\".", locator);
+            throw;
+        }
+
     }
 
     private WebDriverWait GetExplicitWaitFromSeconds(float seconds)
@@ -193,40 +213,16 @@ public sealed partial class WebDriverWrapper
         SetImplicitWaitInTimeSpan(TimeSpan.Zero);
         try
         {
+            Log.Info("Waiting for page load.");
             GetExplicitWaitFromSeconds(PageLoadTimeoutSeconds).Until(
                 dr => ((IJavaScriptExecutor) dr).ExecuteScript("return document.readyState")!.Equals("complete"));
+            Log.Info("Page load ended.");
         }
         finally
         {
             SetImplicitWaitInTimeSpan(implicitWait);
         }
     }
-
-    [LoggerMessage(
-        Level = LogLevel.Warning,
-        Message = "Element \"{Locator}\" was stale - Waiting for page load and retrying.")]
-    private partial void LogStaleElementRetry(string locator);
-
-    [LoggerMessage(
-        Level = LogLevel.Warning,
-        Message = "Click on \"{Locator}\" was intercepted - Invoking fallback and retrying.")]
-    private partial void LogClickIntercepted(string locator);
-
-    [LoggerMessage(
-        Level = LogLevel.Warning,
-        Message = "File \"{FileName}\" was not found after waiting {TimeoutSeconds}s.")]
-    private partial void LogFileNotDownloaded(string fileName, double timeoutSeconds);
-
-    [LoggerMessage(
-        Level = LogLevel.Information,
-        Message = "File \"{FileName}\" was found after waiting {Seconds}s.")]
-    private partial void LogFileDownloaded(string fileName, double seconds);
-
-    [LoggerMessage(
-        Level = LogLevel.Debug,
-        Message = "Scroll height stabilized after {MilliSeconds}ms.")]
-    private partial void LogScrollStabilized(double milliSeconds);
-
 
     void IDisposable.Dispose()
     {

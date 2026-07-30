@@ -14,6 +14,9 @@ public sealed class HomeSearchResultsPage
 
     public IReadOnlyList<string> GetAllResults()
     {
-        return Driver.GetTexts(ArticlesLocator);
+        Log.Info("Reading all texts from the current search results.");
+        var texts = Driver.GetTexts(ArticlesLocator);
+        Log.InfoFormat("Texts from the current search results: \"{0}\".", string.Join(", ", texts));
+        return texts;
     }
 }

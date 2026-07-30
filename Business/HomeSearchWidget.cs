@@ -17,12 +17,14 @@ public sealed class HomeSearchWidget
 
     public HomeSearchWidget EnterSearchInput(string input)
     {
+        Log.InfoFormat("Entering \"{0}\" into the \"Search\" text input.", input);
         Driver.SendKeys(SearchInputLocator, input);
         return this;
     }
 
     public HomeSearchResultsPage ClickSearchButton()
     {
+        Log.Info("Clicking the \"Search\" button.");
         Driver.Click(SearchBtnLocator);
         return new HomeSearchResultsPage(Driver);
     }

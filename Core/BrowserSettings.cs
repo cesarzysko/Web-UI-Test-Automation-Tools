@@ -1,6 +1,6 @@
 namespace Core;
 
-public class BrowserSettings
+public sealed class BrowserSettings
 {
     public bool Maximized { get; init; }
     public int ImplicitWaitTimeSeconds { get; init; }

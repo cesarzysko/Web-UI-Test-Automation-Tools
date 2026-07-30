@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="log4net" Version="3.3.2" />
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.9" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.9" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.9" />
@@ -19,6 +20,10 @@
       <None Remove="appsettings.json" />
       <Content Include="appsettings.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Config\log4net.config" />
+      <Content Include="Config\log4net.config">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
     </ItemGroup>
 
