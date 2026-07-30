@@ -5,6 +5,7 @@ using log4net;
 using log4net.Config;
 using log4net.Repository.Hierarchy;
 using Microsoft.Extensions.DependencyInjection;
+using NUnit.Framework.Interfaces;
 using OpenQA.Selenium;
 
 namespace Tests;
@@ -43,6 +44,11 @@ public abstract class TestBase
     [TearDown]
     public void TearDown()
     {
+        if (TestContext.CurrentContext.Result.Outcome.Status == TestStatus.Failed)
+        {
+            Driver.TakeScreenshot(TestContext.CurrentContext.Test.FullName);
+        }
+
         testScope.Dispose();
     }
 

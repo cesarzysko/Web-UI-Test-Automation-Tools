@@ -14,13 +14,15 @@ public sealed class WebDriverWrapper
 
     private readonly IWebDriver Driver;
     private readonly string DownloadPath;
+    private readonly string ScreenshotPath;
 
     private static ILog Log => LogManager.GetLogger(typeof(WebDriverWrapper));
 
-    public WebDriverWrapper(IWebDriver driver, IDownloadPathGetter? downloadPath)
+    public WebDriverWrapper(IWebDriver driver, IConfig config, IDownloadPathGetter downloadPath)
     {
         Driver = driver;
-        DownloadPath = downloadPath?.GetDownloadPath() ?? string.Empty;
+        ScreenshotPath = Path.Combine(Directory.GetCurrentDirectory(), config.Data.ScreenshotsSubdirectory);
+        DownloadPath = downloadPath.GetDownloadPath();
     }
 
     public void NavigateToUrl(string url)
@@ -171,6 +173,26 @@ public sealed class WebDriverWrapper
 
         Log.WarnFormat("File \"{0}\" was not found after waiting for {1} seconds.", filePath, timeout.TotalSeconds);
         return false;
+    }
+
+    public void TakeScreenshot(string name)
+    {
+        var screenshot = ((ITakesScreenshot)Driver).GetScreenshot();
+        var filePath = GetScreenshotPath(name);
+        Log.InfoFormat("Saving screenshot at \"{0}\".", filePath);
+        screenshot.SaveAsFile(filePath);
+    }
+
+    private string GetScreenshotPath(string name)
+    {
+        var fileName = GetScreenshotFileName(name);
+        return Path.Combine(ScreenshotPath, fileName);
+    }
+
+    private static string GetScreenshotFileName(string name)
+    {
+        var now = DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss-fff");
+        return $"{now}_{name}";
     }
 
     private void SetImplicitWaitInTimeSpan(TimeSpan timeSpan)

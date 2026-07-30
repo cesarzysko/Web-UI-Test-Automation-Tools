@@ -17,4 +17,5 @@ public interface IWebDriverWrapper
     void SendKeysWithEnter(By locator, string input);
     void SendKeys(By locator, string input);
     bool IsFileDownloaded(string fileName, TimeSpan timeout);
+    void TakeScreenshot(string name);
 }
