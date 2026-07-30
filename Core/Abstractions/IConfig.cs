@@ -1,6 +1,4 @@
-using Microsoft.Extensions.Logging;
-
-namespace Core;
+namespace Core.Abstractions;
 
 public interface IConfig
 {

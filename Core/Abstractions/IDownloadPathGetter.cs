@@ -1,4 +1,4 @@
-namespace Core;
+namespace Core.Abstractions;
 
 public interface IDownloadPathGetter
 {

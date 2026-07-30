@@ -1,5 +1,6 @@
 using Business;
 using Core;
+using Core.Abstractions;
 using log4net;
 using log4net.Config;
 using log4net.Repository.Hierarchy;
@@ -50,8 +51,9 @@ public abstract class TestBase
         var sc = new ServiceCollection();
         sc.AddSingleton<IConfig, ConfigurationFileConfig>();
         sc.AddScoped<IDownloadPathGetter, DownloadPathGetter>();
-        sc.AddScoped<WebDriverFactory>();
-        sc.AddScoped<IWebDriver>(sp => sp.GetRequiredService<WebDriverFactory>().CreateDriver());
+        sc.AddScoped<IWebDriverFactory, ChromeDriverFactory>();
+        sc.AddScoped<BrowserFactory>();
+        sc.AddScoped<IWebDriver>(sp => sp.GetRequiredService<BrowserFactory>().CreateDriver());
         sc.AddScoped<IWebDriverWrapper, WebDriverWrapper>();
         sc.AddScoped<HomePage>();
         return sc.BuildServiceProvider();

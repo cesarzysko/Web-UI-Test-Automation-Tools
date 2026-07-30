@@ -1,3 +1,4 @@
+using Core.Abstractions;
 using Microsoft.Extensions.Configuration;
 
 namespace Core;
@@ -5,9 +6,11 @@ namespace Core;
 public sealed class ConfigurationFileConfig
     : IConfig
 {
+    private static readonly string ConfigPath = Path.Combine("Config", "appsettings.json");
+
     public ConfigData Data { get; } = new ConfigurationBuilder()
         .SetBasePath(AppContext.BaseDirectory)
-        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+        .AddJsonFile(ConfigPath, optional: false, reloadOnChange: false)
         .Build()
         .Get<ConfigData>()!;
 }
