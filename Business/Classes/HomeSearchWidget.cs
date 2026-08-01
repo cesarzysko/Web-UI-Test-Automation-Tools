@@ -12,20 +12,26 @@ public sealed class HomeSearchWidget
     private static readonly By SearchBtnLocator =
         By.ClassName("custom-search-button");
 
-    public HomeSearchWidget(IWebDriverWrapper driver)
-        : base(driver) { }
+    private readonly IElementInteractor Interactor;
+    private readonly IPageFactory PageFactory;
+
+    public HomeSearchWidget(IElementInteractor interactor, IPageFactory pageFactory)
+    {
+        Interactor = interactor;
+        PageFactory = pageFactory;
+    }
 
     public HomeSearchWidget EnterSearchInput(string input)
     {
         Log.InfoFormat("Entering \"{0}\" into the \"Search\" text input.", input);
-        Driver.SendKeys(SearchInputLocator, input);
+        Interactor.SendKeys(SearchInputLocator, input);
         return this;
     }
 
     public HomeSearchResultsPage ClickSearchButton()
     {
         Log.Info("Clicking the \"Search\" button.");
-        Driver.Click(SearchBtnLocator);
-        return new HomeSearchResultsPage(Driver);
+        Interactor.Click(SearchBtnLocator);
+        return PageFactory.Create<HomeSearchResultsPage>();
     }
 }

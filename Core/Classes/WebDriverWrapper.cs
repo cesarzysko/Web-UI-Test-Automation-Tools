@@ -7,7 +7,7 @@ using OpenQA.Selenium.Support.UI;
 namespace Core;
 
 public sealed class WebDriverWrapper
-    : IWebDriverWrapper
+    : IDownloadWaiter, IElementInteractor, IGestureController, INavigator, IScreenshotTaker, IDisposable
 {
     private const int PageLoadTimeoutSeconds = 5;
 

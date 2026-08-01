@@ -53,7 +53,7 @@ public sealed class Tests
         // Act
         HomePage.GoToFooter()
             .ClickCodeOfEthicalConductButton();
-        var isDownloaded = Driver.IsFileDownloaded(fileName, DownloadTimeout);
+        var isDownloaded = DownloadWaiter.IsFileDownloaded(fileName, DownloadTimeout);
         // Assert
         Assert.That(isDownloaded, Is.True);
     }

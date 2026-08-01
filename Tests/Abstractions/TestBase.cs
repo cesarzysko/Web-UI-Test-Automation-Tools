@@ -12,10 +12,12 @@ public abstract class TestBase
     private IServiceScope testScope;
 
     protected HomePage HomePage =>
-        testScope.ServiceProvider.GetRequiredService<HomePage>();
+        testScope.ServiceProvider.GetRequiredService<IPageFactory>().Create<HomePage>();
+    protected IDownloadWaiter DownloadWaiter
+        => testScope.ServiceProvider.GetRequiredService<IDownloadWaiter>();
 
-    protected IWebDriverWrapper Driver =>
-        testScope.ServiceProvider.GetRequiredService<IWebDriverWrapper>();
+    private IScreenshotTaker ScreenshotTaker
+        => testScope.ServiceProvider.GetRequiredService<IScreenshotTaker>();
 
     [OneTimeSetUp]
     public static void OneTimeSetUp()
@@ -41,7 +43,7 @@ public abstract class TestBase
     {
         if (TestContext.CurrentContext.Result.Outcome.Status == TestStatus.Failed)
         {
-            Driver.TakeScreenshot(TestContext.CurrentContext.Test.FullName);
+            ScreenshotTaker.TakeScreenshot(TestContext.CurrentContext.Test.FullName);
         }
 
         testScope.Dispose();

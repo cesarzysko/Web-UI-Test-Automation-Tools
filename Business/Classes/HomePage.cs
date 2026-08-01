@@ -18,37 +18,43 @@ public sealed class HomePage
     private static readonly By FooterLocator =
         By.ClassName("copyright");
 
-    public HomePage(IWebDriverWrapper driver, IConfig config)
-        : base(driver)
+    private readonly IElementInteractor Interactor;
+    private readonly IGestureController GestureController;
+    private readonly IPageFactory PageFactory;
+
+    public HomePage(IConfig config, INavigator navigator, IElementInteractor interactor, IGestureController gestureController, IPageFactory pageFactory)
     {
-        Driver.NavigateToUrl(config.Data.MainPageUrl);
+        navigator.NavigateToUrl(config.Data.MainPageUrl);
+        Interactor = interactor;
+        GestureController = gestureController;
+        PageFactory = pageFactory;
     }
 
     public HomeCareersPage ClickCareersButton()
     {
         Log.Info("Clicking the \"Careers\" button.");
-        Driver.Click(CareersBtnLocator);
-        return new HomeCareersPage(Driver);
+        Interactor.Click(CareersBtnLocator);
+        return PageFactory.Create<HomeCareersPage>();
     }
 
     public HomeSearchWidget ClickMagnifierButton()
     {
         Log.Info("Clicking the \"Magnifier\" icon button.");
-        Driver.Click(MagnifierBtnLocator);
-        return new HomeSearchWidget(Driver);
+        Interactor.Click(MagnifierBtnLocator);
+        return PageFactory.Create<HomeSearchWidget>();
     }
 
     public HomeFooterWidget GoToFooter()
     {
         Log.Info("Scrolling down to the footer.");
-        Driver.ScrollToElement(FooterLocator);
-        return new HomeFooterWidget(Driver);
+        GestureController.ScrollToElement(FooterLocator);
+        return PageFactory.Create<HomeFooterWidget>();
     }
 
     public HomeInsightsPage ClickInsightsButton()
     {
         Log.Info("Clicking the \"Insights\" button.");
-        Driver.Click(InsightsBtnLocator);
-        return new HomeInsightsPage(Driver);
+        Interactor.Click(InsightsBtnLocator);
+        return PageFactory.Create<HomeInsightsPage>();
     }
 }

@@ -9,13 +9,19 @@ public sealed class HomeCareersPage
     private static readonly By StartYourSearchBtnLocator =
         By.PartialLinkText("START YOUR SEARCH");
 
-    public HomeCareersPage(IWebDriverWrapper driver)
-        : base(driver) { }
+    private readonly IElementInteractor Interactor;
+    private readonly IPageFactory PageFactory;
+
+    public HomeCareersPage(IElementInteractor interactor, IPageFactory pageFactory)
+    {
+        Interactor = interactor;
+        PageFactory = pageFactory;
+    }
 
     public CareersPage ClickStartYourSearchHereButton()
     {
         Log.Info("Clicking the \"START YOUR SEARCH HERE\" button.");
-        Driver.Click(StartYourSearchBtnLocator);
-        return new CareersPage(Driver);
+        Interactor.Click(StartYourSearchBtnLocator);
+        return PageFactory.Create<CareersPage>();
     }
 }

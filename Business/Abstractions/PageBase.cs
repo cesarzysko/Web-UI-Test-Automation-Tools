@@ -1,17 +1,13 @@
-using Core;
 using log4net;
 
 namespace Business;
 
 public abstract class PageBase
 {
-    protected readonly IWebDriverWrapper Driver;
-
     protected ILog Log => LogManager.GetLogger(GetType());
 
-    protected PageBase(IWebDriverWrapper driver)
+    protected PageBase()
     {
         Log.InfoFormat("Initializing Page Object of type \"{0}\".", GetType());
-        Driver = driver;
     }
 }

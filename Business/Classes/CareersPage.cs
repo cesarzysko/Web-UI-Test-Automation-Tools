@@ -27,8 +27,12 @@ public sealed class CareersPage
     private static readonly By LatestResultDescriptionLocator = // language=XPath
         By.XPath("//div[contains(@class, 'JobCard_accordionHeader')]");
 
-    public CareersPage(IWebDriverWrapper driver)
-        : base(driver) { }
+    private readonly IElementInteractor Interactor;
+
+    public CareersPage(IElementInteractor interactor)
+    {
+        Interactor = interactor;
+    }
 
     public CareersPage SearchForRemotePosition(string keyword, string country)
     {
@@ -44,7 +48,7 @@ public sealed class CareersPage
     {
         ExpandLatestResult();
         Log.Info("Reading the text from the latest search result.");
-        var text = Driver.GetText(LatestResultDescriptionLocator);
+        var text = Interactor.GetText(LatestResultDescriptionLocator);
         Log.InfoFormat("Text from the latest search result: \"{0}\".", text);
         return text;
     }
@@ -52,36 +56,36 @@ public sealed class CareersPage
     private void ExpandLatestResult()
     {
         Log.Info("Clicking the expand button on the latest search result.");
-        Driver.Click(LatestResultExpanderLocator);
+        Interactor.Click(LatestResultExpanderLocator);
     }
 
     private void EnterKeyword(string keyword)
     {
         Log.InfoFormat("Entering \"{0}\" into the \"Keyword\" text input.", keyword);
-        Driver.SendKeysWithEnter(RoleOrKeywordInputLocator, keyword);
+        Interactor.SendKeysWithEnter(RoleOrKeywordInputLocator, keyword);
     }
 
     private void EnterCountry(string country)
     {
         Log.InfoFormat("Entering \"{0}\" into the \"Country\" text input.", country);
-        Driver.SendKeysWithEnter(CountryInputLocator, country);
+        Interactor.SendKeysWithEnter(CountryInputLocator, country);
     }
 
     private void CheckRemoteOption()
     {
         Log.Info("Checking the \"Remote\" checkbox.");
-        Driver.ClickWithInterceptFallback(RemoteCheckboxLocator, AcceptCookies);
+        Interactor.ClickWithInterceptFallback(RemoteCheckboxLocator, AcceptCookies);
     }
 
     private void ClickSearchButton()
     {
         Log.Info("Clicking the \"Search\" button.");
-        Driver.Click(PositionSearchBtnLocator);
+        Interactor.Click(PositionSearchBtnLocator);
     }
 
     private void AcceptCookies()
     {
         Log.Info("Clicking the \"Accept Cookies\" button.");
-        Driver.Click(CookiesBtnLocator);
+        Interactor.Click(CookiesBtnLocator);
     }
 }
