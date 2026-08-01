@@ -7,7 +7,7 @@ using OpenQA.Selenium.Support.UI;
 namespace Core;
 
 public sealed class WebDriverWrapper
-    : IDownloadWaiter, IElementInteractor, IGestureController, INavigator, IScreenshotTaker, IDisposable
+    : IDownloadWaiter, IElementInteractor, IGestureController, INavigator, IScreenshotTaker
 {
     private const int PageLoadTimeoutSeconds = 5;
 
@@ -239,10 +239,5 @@ public sealed class WebDriverWrapper
         {
             driver.SetImplicitWait(implicitWait);
         }
-    }
-
-    void IDisposable.Dispose()
-    {
-        driver.Dispose();
     }
 }
