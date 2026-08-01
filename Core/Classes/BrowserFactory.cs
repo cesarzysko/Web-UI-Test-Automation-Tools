@@ -3,6 +3,7 @@ using OpenQA.Selenium;
 namespace Core;
 
 public sealed class BrowserFactory
+    : IBrowserFactory
 {
     private readonly IWebDriverFactory factory;
 

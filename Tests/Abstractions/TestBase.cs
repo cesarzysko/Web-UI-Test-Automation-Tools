@@ -57,8 +57,8 @@ public abstract class TestBase
         sc.AddSingleton<IConfig, ConfigurationFileConfig>();
         sc.AddScoped<IDownloadPathGetter, DownloadPathGetter>();
         sc.AddScoped<IWebDriverFactory, ChromeDriverFactory>();
-        sc.AddScoped<BrowserFactory>();
-        sc.AddScoped<IWebDriver>(sp => sp.GetRequiredService<BrowserFactory>().CreateDriver());
+        sc.AddScoped<IBrowserFactory, BrowserFactory>();
+        sc.AddScoped<IWebDriver>(sp => sp.GetRequiredService<IBrowserFactory>().CreateDriver());
         sc.AddScoped<IWebDriverWrapper, WebDriverWrapper>();
         sc.AddScoped<HomePage>();
         return sc.BuildServiceProvider();
