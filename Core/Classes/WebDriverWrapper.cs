@@ -2,14 +2,13 @@ using System.Diagnostics;
 using log4net;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
-using OpenQA.Selenium.Support.UI;
 
 namespace Core;
 
 public sealed class WebDriverWrapper
     : IDownloadWaiter, IElementInteractor, IGestureController, INavigator, IScreenshotTaker
 {
-    private const int PageLoadTimeoutSeconds = 5;
+    private static readonly TimeSpan PageLoadTimeout = TimeSpan.FromSeconds(5);
 
     private readonly IWebDriver Driver;
     private readonly string DownloadPath;
@@ -219,11 +218,6 @@ public sealed class WebDriverWrapper
 
     }
 
-    private WebDriverWait GetExplicitWaitFromSeconds(float seconds)
-    {
-        return new WebDriverWait(Driver, TimeSpan.FromSeconds(seconds));
-    }
-
     private void WaitUntilPageLoaded()
     {
         TimeSpan implicitWait = Driver.Manage().Timeouts().ImplicitWait;
@@ -231,7 +225,7 @@ public sealed class WebDriverWrapper
         try
         {
             Log.Info("Waiting for page load.");
-            GetExplicitWaitFromSeconds(PageLoadTimeoutSeconds).Until(
+            Driver.GetExplicitWait(PageLoadTimeout).Until(
                 dr => ((IJavaScriptExecutor) dr).ExecuteScript("return document.readyState")!.Equals("complete"));
             Log.Info("Page load ended.");
         }
