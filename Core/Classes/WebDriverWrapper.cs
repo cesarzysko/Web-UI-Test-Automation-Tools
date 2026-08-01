@@ -151,15 +151,15 @@ public sealed class WebDriverWrapper
 
     public string GetDownloadedFile(TimeSpan timeout)
     {
-        const string tempFileName = ".org.chromium.Chromium";
-        const string altTempFileName = ".crdownload";
+        const string TempFileName = ".org.chromium.Chromium";
+        const string AltTempFileName = ".crdownload";
         TimeSpan SleepTime = TimeSpan.FromMilliseconds(50);
         Stopwatch sw = Stopwatch.StartNew();
         Log.InfoFormat("Waiting for file download at path \"{0}\".", downloadPath);
         while (sw.Elapsed < timeout)
         {
             Thread.Sleep(SleepTime);
-            var files = Directory.GetFiles(downloadPath).WhereNotContainsAny(tempFileName, altTempFileName);
+            var files = Directory.GetFiles(downloadPath).WhereNotContainsAny(TempFileName, AltTempFileName);
             if (files.Count == 0)
             {
                 continue;

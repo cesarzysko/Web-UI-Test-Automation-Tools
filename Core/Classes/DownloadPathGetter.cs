@@ -5,13 +5,17 @@ namespace Core;
 public sealed class DownloadPathGetter
     : IDownloadPathGetter
 {
-    private string? downloadPath;
+    private readonly string DownloadPath;
+
+    public DownloadPathGetter()
+    {
+        LogManager.GetLogger(nameof(DownloadPathGetter)).Info("INSTANTIATING DOWNLOAD PATH GETTER");
+        DownloadPath = Directory.CreateTempSubdirectory(GetNewDownloadDirectory()).FullName;
+    }
 
     public string GetDownloadPath()
     {
-        LogManager.GetLogger(nameof(DownloadPathGetter)).Info("INSTANTIATING DOWNLOAD PATH GETTER");
-        downloadPath ??= Directory.CreateTempSubdirectory(GetNewDownloadDirectory()).FullName;
-        return downloadPath;
+        return DownloadPath;
     }
 
     private static string GetNewDownloadDirectory()

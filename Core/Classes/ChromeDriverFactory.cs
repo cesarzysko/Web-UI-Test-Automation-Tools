@@ -8,13 +8,13 @@ public sealed class ChromeDriverFactory
 {
     public Browser Browser => Browser.Chrome;
 
-    private readonly BrowserSettings settings;
-    private readonly string downloadPath;
+    private readonly BrowserSettings Settings;
+    private readonly string DownloadPath;
 
     public ChromeDriverFactory(IConfig config, IDownloadPathGetter downloadPathGetter)
     {
-        settings = config.Data.BrowserSettings;
-        downloadPath = downloadPathGetter.GetDownloadPath();
+        Settings = config.Data.BrowserSettings;
+        DownloadPath = downloadPathGetter.GetDownloadPath();
     }
 
     public IWebDriver CreateDriver()
@@ -28,14 +28,14 @@ public sealed class ChromeDriverFactory
     private ChromeOptions CreateChromeOptions()
     {
         ChromeOptions options = new ChromeOptions();
-        options.HandleMaximized(settings.Maximized);
-        options.HandleDownloads(downloadPath);
+        options.HandleMaximized(Settings.Maximized);
+        options.HandleDownloads(DownloadPath);
         return options;
     }
 
     private void SetImplicitWaitTime(IWebDriver driver)
     {
-        var implicitWait = TimeSpan.FromSeconds(settings.ImplicitWaitTimeSeconds);
+        var implicitWait = TimeSpan.FromSeconds(Settings.ImplicitWaitTimeSeconds);
         driver.SetImplicitWait(implicitWait);
     }
 }

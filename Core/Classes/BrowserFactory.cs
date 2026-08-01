@@ -5,15 +5,15 @@ namespace Core;
 public sealed class BrowserFactory
     : IBrowserFactory
 {
-    private readonly IWebDriverFactory factory;
+    private readonly IWebDriverFactory Factory;
 
     public BrowserFactory(IEnumerable<IWebDriverFactory> webDriverFactories, IConfig config)
     {
-        factory = webDriverFactories.First(f => f.Browser == config.Data.Browser);
+        Factory = webDriverFactories.First(f => f.Browser == config.Data.Browser);
     }
 
     public IWebDriver CreateDriver()
     {
-        return factory.CreateDriver();
+        return Factory.CreateDriver();
     }
 }
