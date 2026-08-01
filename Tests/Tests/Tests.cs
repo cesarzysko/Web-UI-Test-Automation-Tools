@@ -68,7 +68,7 @@ public sealed class Tests
             .SwipeCarousel(carouselSwipes)
             .GetCurrentArticleName(out string name)
             .ClickReadMoreButtonForCurrentArticle()
-            .GetArticleName();
+            .GetMatchingArticleName(name);
         // Assert
         Assert.That(articleName, Does.Contain(name).IgnoreCase);
     }
