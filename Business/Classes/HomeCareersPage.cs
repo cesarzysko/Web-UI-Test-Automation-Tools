@@ -9,12 +9,11 @@ public sealed class HomeCareersPage
     private static readonly By StartYourSearchBtnLocator =
         By.PartialLinkText("START YOUR SEARCH");
 
-    private readonly IElementInteractor Interactor;
     private readonly IPageFactory PageFactory;
 
     public HomeCareersPage(IElementInteractor interactor, IPageFactory pageFactory)
+        : base(interactor)
     {
-        Interactor = interactor;
         PageFactory = pageFactory;
     }
 

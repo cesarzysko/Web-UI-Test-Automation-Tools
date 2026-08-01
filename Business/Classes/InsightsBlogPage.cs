@@ -6,12 +6,8 @@ namespace Business;
 public sealed class InsightsBlogPage
     : PageBase
 {
-    private readonly IElementInteractor Interactor;
-
     public InsightsBlogPage(IElementInteractor interactor)
-    {
-        Interactor = interactor;
-    }
+        : base(interactor) { }
 
     public string GetMatchingArticleName(string nameMatch)
     {

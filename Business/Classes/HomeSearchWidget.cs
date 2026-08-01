@@ -12,12 +12,11 @@ public sealed class HomeSearchWidget
     private static readonly By SearchBtnLocator =
         By.ClassName("custom-search-button");
 
-    private readonly IElementInteractor Interactor;
     private readonly IPageFactory PageFactory;
 
     public HomeSearchWidget(IElementInteractor interactor, IPageFactory pageFactory)
+        : base(interactor)
     {
-        Interactor = interactor;
         PageFactory = pageFactory;
     }
 

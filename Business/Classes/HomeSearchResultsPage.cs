@@ -9,12 +9,8 @@ public sealed class HomeSearchResultsPage
     private static readonly By ArticlesLocator = // language=CSS
         By.CssSelector("div.search-results__items article");
 
-    private readonly IElementInteractor Interactor;
-
     public HomeSearchResultsPage(IElementInteractor interactor)
-    {
-        Interactor = interactor;
-    }
+        : base(interactor) { }
 
     public IReadOnlyList<string> GetAllResults()
     {

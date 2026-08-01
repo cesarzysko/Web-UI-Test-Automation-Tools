@@ -27,12 +27,8 @@ public sealed class CareersPage
     private static readonly By LatestResultDescriptionLocator = // language=XPath
         By.XPath("//div[contains(@class, 'JobCard_accordionHeader')]");
 
-    private readonly IElementInteractor Interactor;
-
     public CareersPage(IElementInteractor interactor)
-    {
-        Interactor = interactor;
-    }
+        : base(interactor) { }
 
     public CareersPage SearchForRemotePosition(string keyword, string country)
     {

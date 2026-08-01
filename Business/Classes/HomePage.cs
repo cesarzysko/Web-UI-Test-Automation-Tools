@@ -18,14 +18,13 @@ public sealed class HomePage
     private static readonly By FooterLocator =
         By.ClassName("copyright");
 
-    private readonly IElementInteractor Interactor;
     private readonly IGestureController GestureController;
     private readonly IPageFactory PageFactory;
 
     public HomePage(IConfig config, INavigator navigator, IElementInteractor interactor, IGestureController gestureController, IPageFactory pageFactory)
+        : base(interactor)
     {
         navigator.NavigateToUrl(config.Data.MainPageUrl);
-        Interactor = interactor;
         GestureController = gestureController;
         PageFactory = pageFactory;
     }

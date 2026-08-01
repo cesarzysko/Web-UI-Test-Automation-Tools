@@ -9,12 +9,8 @@ public sealed class HomeFooterWidget
     private static readonly By CodeOfEthicalConductBtnLocator = // language=XPath
         By.XPath("//a[contains(@href, 'code-of-conduct')]");
 
-    private readonly IElementInteractor Interactor;
-
     public HomeFooterWidget(IElementInteractor interactor)
-    {
-        Interactor = interactor;
-    }
+        : base(interactor) { }
 
     public void ClickCodeOfEthicalConductButton()
     {

@@ -21,13 +21,12 @@ public sealed class HomeInsightsPage
     private static readonly By ArticleReadMoreBtnLocator = // language=CSS
         By.CssSelector("div.owl-item.active a.custom-link");
 
-    private readonly IElementInteractor Interactor;
     private readonly IGestureController GestureController;
     private readonly IPageFactory PageFactory;
 
     public HomeInsightsPage(IElementInteractor interactor, IGestureController gestureController, IPageFactory pageFactory)
+        : base(interactor)
     {
-        Interactor = interactor;
         GestureController = gestureController;
         PageFactory = pageFactory;
     }
