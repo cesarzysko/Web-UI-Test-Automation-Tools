@@ -190,11 +190,6 @@ public sealed class WebDriverWrapper
         return $"{now}_{name}";
     }
 
-    private void SetImplicitWaitInTimeSpan(TimeSpan timeSpan)
-    {
-        driver.SetImplicitWait(timeSpan);
-    }
-
     private IReadOnlyList<IWebElement> FindAll(By locator)
     {
         Log.InfoFormat("Trying to find all web elements with locator \"{0}\".", locator);
@@ -228,7 +223,7 @@ public sealed class WebDriverWrapper
     private void WaitUntilPageLoaded()
     {
         TimeSpan implicitWait = driver.Manage().Timeouts().ImplicitWait;
-        SetImplicitWaitInTimeSpan(TimeSpan.Zero);
+        driver.SetImplicitWait(TimeSpan.Zero);
         try
         {
             Log.Info("Waiting for page load.");
@@ -238,7 +233,7 @@ public sealed class WebDriverWrapper
         }
         finally
         {
-            SetImplicitWaitInTimeSpan(implicitWait);
+            driver.SetImplicitWait(implicitWait);
         }
     }
 
