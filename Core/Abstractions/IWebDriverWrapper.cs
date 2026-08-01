@@ -1,6 +1,6 @@
 using OpenQA.Selenium;
 
-namespace Core.Abstractions;
+namespace Core;
 
 public interface IWebDriverWrapper
     : IDisposable

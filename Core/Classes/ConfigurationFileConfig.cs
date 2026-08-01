@@ -1,4 +1,3 @@
-using Core.Abstractions;
 using Microsoft.Extensions.Configuration;
 
 namespace Core;

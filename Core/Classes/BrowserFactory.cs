@@ -1,4 +1,3 @@
-using Core.Abstractions;
 using OpenQA.Selenium;
 
 namespace Core;

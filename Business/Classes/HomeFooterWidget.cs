@@ -1,10 +1,9 @@
 using Core;
-using Core.Abstractions;
 using OpenQA.Selenium;
 
 namespace Business;
 
-public class HomeFooterWidget
+public sealed class HomeFooterWidget
     : PageBase
 {
     private static readonly By CodeOfEthicalConductBtnLocator = // language=XPath

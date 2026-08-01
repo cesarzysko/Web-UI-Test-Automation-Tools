@@ -1,4 +1,3 @@
-using Core.Abstractions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 
@@ -36,6 +35,7 @@ public sealed class ChromeDriverFactory
 
     private void SetImplicitWaitTime(IWebDriver driver)
     {
-        driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(settings.ImplicitWaitTimeSeconds);
+        var implicitWait = TimeSpan.FromSeconds(settings.ImplicitWaitTimeSeconds);
+        driver.SetImplicitWait(implicitWait);
     }
 }

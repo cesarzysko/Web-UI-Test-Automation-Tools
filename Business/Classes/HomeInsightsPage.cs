@@ -1,5 +1,4 @@
 using Core;
-using Core.Abstractions;
 using OpenQA.Selenium;
 
 namespace Business;
@@ -27,8 +26,9 @@ public sealed class HomeInsightsPage
 
     public HomeInsightsPage SwipeCarousel(int swipes)
     {
+        const float SwipeLengthRatio = 0.4f;
         var elemWidth = Driver.GetElementWidth(ArticleLocator);
-        var swipeLength = (int)(elemWidth * 0.4f);
+        var swipeLength = (int)(elemWidth * SwipeLengthRatio);
         Log.InfoFormat("Swiping the carousel \"{0}\" times. Swipe length will be \"{1}\".", swipes, swipeLength);
         for (int i = 0; i < swipes; ++i)
         {
