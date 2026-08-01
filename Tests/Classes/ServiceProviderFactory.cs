@@ -39,7 +39,7 @@ public static class ServiceProviderFactory
 
     private static void AddPageObjects(ServiceCollection sc)
     {
-        sc.AddSingleton<IPageFactory, PageFactory>(sp => new PageFactory(sp));
+        sc.AddScoped<IPageFactory, PageFactory>(sp => new PageFactory(sp));
         sc.AddTransient<HomePage>();
         sc.AddTransient<CareersPage>();
         sc.AddTransient<HomeCareersPage>();

@@ -2,6 +2,13 @@ namespace Core;
 
 public static class StringUtils
 {
+    public static IReadOnlyList<string> WhereNotContainsAny(this IReadOnlyList<string> source, params string[] texts)
+    {
+        return source
+            .Where(s => texts.All(s.NotContains))
+            .ToList();
+    }
+
     public static IReadOnlyList<string> WhereNotContains(this IReadOnlyList<string> source, string text)
     {
         return source

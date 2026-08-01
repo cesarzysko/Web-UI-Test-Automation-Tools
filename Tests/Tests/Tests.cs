@@ -53,9 +53,9 @@ public sealed class Tests
         // Act
         HomePage.GoToFooter()
             .ClickCodeOfEthicalConductButton();
-        var isDownloaded = DownloadWaiter.IsFileDownloaded(fileName, DownloadTimeout);
+        var downloadedFile = DownloadWaiter.GetDownloadedFile(DownloadTimeout);
         // Assert
-        Assert.That(isDownloaded, Is.True);
+        Assert.That(downloadedFile, Is.EqualTo(fileName));
     }
 
     [Test]

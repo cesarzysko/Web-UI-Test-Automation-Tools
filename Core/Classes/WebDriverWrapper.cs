@@ -149,25 +149,29 @@ public sealed class WebDriverWrapper
         Find(locator).SendKeys(input);
     }
 
-    public bool IsFileDownloaded(string fileName, TimeSpan timeout)
+    public string GetDownloadedFile(TimeSpan timeout)
     {
+        const string tempFileName = ".org.chromium.Chromium";
+        const string altTempFileName = ".crdownload";
         TimeSpan SleepTime = TimeSpan.FromMilliseconds(50);
-        string filePath = Path.Combine(downloadPath, fileName);
         Stopwatch sw = Stopwatch.StartNew();
+        Log.InfoFormat("Waiting for file download at path \"{0}\".", downloadPath);
         while (sw.Elapsed < timeout)
         {
             Thread.Sleep(SleepTime);
-            if (!File.Exists(filePath))
+            var files = Directory.GetFiles(downloadPath).WhereNotContainsAny(tempFileName, altTempFileName);
+            if (files.Count == 0)
             {
                 continue;
             }
 
-            Log.InfoFormat("File \"{0}\" was found after waiting for {1} seconds.", filePath, sw.Elapsed.TotalSeconds);
-            return true;
+            string fileName = Path.GetFileName(files[0]);
+            Log.InfoFormat("File \"{0}\" was found after waiting for {1} seconds.", fileName, sw.Elapsed.TotalSeconds);
+            return fileName;
         }
 
-        Log.WarnFormat("File \"{0}\" was not found after waiting for {1} seconds.", filePath, timeout.TotalSeconds);
-        return false;
+        Log.WarnFormat("No file was not found after waiting for {0} seconds.", timeout.TotalSeconds);
+        return string.Empty;
     }
 
     public void TakeScreenshot(string name)

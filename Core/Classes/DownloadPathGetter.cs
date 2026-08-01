@@ -1,3 +1,5 @@
+using log4net;
+
 namespace Core;
 
 public sealed class DownloadPathGetter
@@ -7,6 +9,7 @@ public sealed class DownloadPathGetter
 
     public string GetDownloadPath()
     {
+        LogManager.GetLogger(nameof(DownloadPathGetter)).Info("INSTANTIATING DOWNLOAD PATH GETTER");
         downloadPath ??= Directory.CreateTempSubdirectory(GetNewDownloadDirectory()).FullName;
         return downloadPath;
     }
