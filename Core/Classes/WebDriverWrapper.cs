@@ -11,22 +11,22 @@ public sealed class WebDriverWrapper
 {
     private const int PageLoadTimeoutSeconds = 5;
 
-    private readonly IWebDriver driver;
-    private readonly string downloadPath;
-    private readonly string screenshotPath;
+    private readonly IWebDriver Driver;
+    private readonly string DownloadPath;
+    private readonly string ScreenshotPath;
 
     private static ILog Log => LogManager.GetLogger(typeof(WebDriverWrapper));
 
     public WebDriverWrapper(IWebDriver driver, IConfig config, IDownloadPathGetter downloadPath)
     {
-        this.driver = driver;
-        screenshotPath = Path.Combine(Directory.GetCurrentDirectory(), config.Data.ScreenshotsSubdirectory);
-        this.downloadPath = downloadPath.GetDownloadPath();
+        this.Driver = driver;
+        ScreenshotPath = Path.Combine(Directory.GetCurrentDirectory(), config.Data.ScreenshotsSubdirectory);
+        this.DownloadPath = downloadPath.GetDownloadPath();
     }
 
     public void NavigateToUrl(string url)
     {
-        driver.Navigate().GoToUrl(url);
+        Driver.Navigate().GoToUrl(url);
     }
 
     public string GetText(By locator)
@@ -77,7 +77,7 @@ public sealed class WebDriverWrapper
     public void ClickJS(By locator)
     {
         Log.InfoFormat("Trying to click the web element with locator \"{0}\".", locator);
-        var js = ((IJavaScriptExecutor)driver);
+        var js = ((IJavaScriptExecutor)Driver);
         var elem = Find(locator);
         js.ExecuteScript("arguments[0].click();", elem);
     }
@@ -87,7 +87,7 @@ public sealed class WebDriverWrapper
         const int TriesUntilStable = 5;
         const int TrySleepMs = 200;
 
-        var js = (IJavaScriptExecutor)driver;
+        var js = (IJavaScriptExecutor)Driver;
         int previousHeight = -1;
         int currentTries = 0;
         Stopwatch sw = Stopwatch.StartNew();
@@ -134,7 +134,7 @@ public sealed class WebDriverWrapper
 
         sequence.AddAction(pointer.CreatePointerUp(MouseButton.Left));
         sequence.AddAction(pointer.CreatePointerMove(elem, 0, 0, TimeSpan.FromMilliseconds(msPause)));
-        ((IActionExecutor)driver).PerformActions([sequence]);
+        ((IActionExecutor)Driver).PerformActions([sequence]);
         Log.InfoFormat("Swiping web element with locator \"{0}\" completed.", locator);
     }
 
@@ -155,11 +155,11 @@ public sealed class WebDriverWrapper
         const string AltTempFileName = ".crdownload";
         TimeSpan SleepTime = TimeSpan.FromMilliseconds(50);
         Stopwatch sw = Stopwatch.StartNew();
-        Log.InfoFormat("Waiting for file download at path \"{0}\".", downloadPath);
+        Log.InfoFormat("Waiting for file download at path \"{0}\".", DownloadPath);
         while (sw.Elapsed < timeout)
         {
             Thread.Sleep(SleepTime);
-            var files = Directory.GetFiles(downloadPath).WhereNotContainsAny(TempFileName, AltTempFileName);
+            var files = Directory.GetFiles(DownloadPath).WhereNotContainsAny(TempFileName, AltTempFileName);
             if (files.Count == 0)
             {
                 continue;
@@ -176,7 +176,7 @@ public sealed class WebDriverWrapper
 
     public void TakeScreenshot(string name)
     {
-        var screenshot = ((ITakesScreenshot)driver).GetScreenshot();
+        var screenshot = ((ITakesScreenshot)Driver).GetScreenshot();
         var filePath = GetScreenshotPath(name);
         Log.InfoFormat("Saving screenshot at \"{0}\".", filePath);
         screenshot.SaveAsFile(filePath);
@@ -185,7 +185,7 @@ public sealed class WebDriverWrapper
     private string GetScreenshotPath(string name)
     {
         var fileName = GetScreenshotFileName(name);
-        return Path.Combine(screenshotPath, fileName);
+        return Path.Combine(ScreenshotPath, fileName);
     }
 
     private static string GetScreenshotFileName(string name)
@@ -197,7 +197,7 @@ public sealed class WebDriverWrapper
     private IReadOnlyList<IWebElement> FindAll(By locator)
     {
         Log.InfoFormat("Trying to find all web elements with locator \"{0}\".", locator);
-        var elems = driver.FindElements(locator);
+        var elems = Driver.FindElements(locator);
         Log.InfoFormat("Count of found web elements with locator \"{0}\": \"{1}\".", locator, elems.Count);
         return elems;
     }
@@ -207,7 +207,7 @@ public sealed class WebDriverWrapper
         try
         {
             Log.InfoFormat("Trying to find web element with locator \"{0}\".", locator);
-            var elem = driver.FindElement(locator);
+            var elem = Driver.FindElement(locator);
             Log.InfoFormat("Web element with locator \"{0}\" successfully found.", locator);
             return elem;
         }
@@ -221,13 +221,13 @@ public sealed class WebDriverWrapper
 
     private WebDriverWait GetExplicitWaitFromSeconds(float seconds)
     {
-        return new WebDriverWait(driver, TimeSpan.FromSeconds(seconds));
+        return new WebDriverWait(Driver, TimeSpan.FromSeconds(seconds));
     }
 
     private void WaitUntilPageLoaded()
     {
-        TimeSpan implicitWait = driver.Manage().Timeouts().ImplicitWait;
-        driver.SetImplicitWait(TimeSpan.Zero);
+        TimeSpan implicitWait = Driver.Manage().Timeouts().ImplicitWait;
+        Driver.SetImplicitWait(TimeSpan.Zero);
         try
         {
             Log.Info("Waiting for page load.");
@@ -237,7 +237,7 @@ public sealed class WebDriverWrapper
         }
         finally
         {
-            driver.SetImplicitWait(implicitWait);
+            Driver.SetImplicitWait(implicitWait);
         }
     }
 }
