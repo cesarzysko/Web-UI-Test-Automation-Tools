@@ -85,7 +85,7 @@ public class WebElementInteractor
 
     private void WaitUntilPageLoaded()
     {
-        TimeSpan implicitWait = Driver.Manage().Timeouts().ImplicitWait;
+        TimeSpan implicitWait = Driver.GetImplicitWait();
         Driver.SetImplicitWait(TimeSpan.Zero);
         try
         {
