@@ -29,12 +29,16 @@ public static class ServiceProviderFactory
         sc.AddScoped<IWebDriverFactory, ChromeDriverFactory>();
         sc.AddScoped<IBrowserFactory, BrowserFactory>();
         sc.AddScoped<IWebDriver>(sp => sp.GetRequiredService<IBrowserFactory>().CreateDriver());
-        sc.AddScoped<WebDriverWrapper>();
-        sc.AddScoped<IDownloadWaiter>(sp => sp.GetRequiredService<WebDriverWrapper>());
-        sc.AddScoped<IElementInteractor>(sp => sp.GetRequiredService<WebDriverWrapper>());
-        sc.AddScoped<IGestureController>(sp => sp.GetRequiredService<WebDriverWrapper>());
-        sc.AddScoped<INavigator>(sp => sp.GetRequiredService<WebDriverWrapper>());
-        sc.AddScoped<IScreenshotTaker>(sp => sp.GetRequiredService<WebDriverWrapper>());
+        sc.AddTransient<IElementFinder, WebElementFinder>();
+        sc.AddTransient<IDownloadWaiter, WebDownloadWaiter>();
+        sc.AddTransient<IElementInteractor, WebElementInteractor>();
+        sc.AddTransient<IGestureController, WebGestureController>();
+        sc.AddTransient<INavigator, WebNavigator>();
+        sc.AddTransient<IScreenshotTaker, WebScreenshotTaker>(sp =>
+        {
+            var subDir = sp.GetRequiredService<IConfig>().Data.ScreenshotsSubDirectory;
+            return ActivatorUtilities.CreateInstance<WebScreenshotTaker>(sp, subDir);
+        });
     }
 
     private static void AddPageObjects(ServiceCollection sc)
