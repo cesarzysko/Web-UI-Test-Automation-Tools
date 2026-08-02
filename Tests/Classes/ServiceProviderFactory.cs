@@ -44,7 +44,11 @@ public static class ServiceProviderFactory
     private static void AddPageObjects(ServiceCollection sc)
     {
         sc.AddScoped<IPageFactory, PageFactory>(sp => new PageFactory(sp));
-        sc.AddTransient<HomePage>();
+        sc.AddTransient<HomePage>(sp =>
+        {
+            var url = sp.GetRequiredService<IConfig>().Data.MainPageUrl;
+            return ActivatorUtilities.CreateInstance<HomePage>(sp, url);
+        });
         sc.AddTransient<CareersPage>();
         sc.AddTransient<HomeCareersPage>();
         sc.AddTransient<HomeFooterWidget>();

@@ -21,10 +21,10 @@ public sealed class HomePage
     private readonly IGestureController GestureController;
     private readonly IPageFactory PageFactory;
 
-    public HomePage(IConfig config, INavigator navigator, IElementInteractor interactor, IGestureController gestureController, IPageFactory pageFactory)
+    public HomePage(string url, INavigator navigator, IElementInteractor interactor, IGestureController gestureController, IPageFactory pageFactory)
         : base(interactor)
     {
-        navigator.NavigateToUrl(config.Data.MainPageUrl);
+        navigator.NavigateToUrl(url);
         GestureController = gestureController;
         PageFactory = pageFactory;
     }
