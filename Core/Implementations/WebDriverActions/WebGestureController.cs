@@ -45,15 +45,15 @@ public sealed class WebGestureController
         }
 
         sw.Stop();
-        Log.InfoFormat("Scroll height stabilized after {0}ms.", sw.Elapsed.TotalMilliseconds);
-        Log.InfoFormat("Scrolling down to web element with locator \"{0}\".", locator);
+        Log.DebugFormat("Scroll height stabilized after {0}ms.", sw.Elapsed.TotalMilliseconds);
+        Log.DebugFormat("Scrolling down to web element with locator \"{0}\".", locator);
         var elem = Finder.Find(locator);
         js.ExecuteScript("arguments[0].scrollIntoView({block:'end'});", elem);
     }
 
     public void SwipeElementHorizontally(By locator, int by, int msDuration, int msPause)
     {
-        Log.InfoFormat("Swiping web element with locator \"{0}\" horizontally by {1}px over {2}ms.", locator, by, msDuration);
+        Log.DebugFormat("Swiping web element with locator \"{0}\" horizontally by {1}px over {2}ms.", locator, by, msDuration);
         var elem = Finder.Find(locator);
         var pointer = new PointerInputDevice(PointerKind.Mouse);
         var sequence = new ActionSequence(pointer, 0);
@@ -73,6 +73,6 @@ public sealed class WebGestureController
         sequence.AddAction(pointer.CreatePointerUp(MouseButton.Left));
         sequence.AddAction(pointer.CreatePointerMove(elem, 0, 0, TimeSpan.FromMilliseconds(msPause)));
         ((IActionExecutor)Driver).PerformActions([sequence]);
-        Log.InfoFormat("Swiping web element with locator \"{0}\" completed.", locator);
+        Log.DebugFormat("Swiping web element with locator \"{0}\" completed.", locator);
     }
 }

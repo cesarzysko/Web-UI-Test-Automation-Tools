@@ -10,6 +10,7 @@ public static class Log4NetExtensions
         {
             return logLevel switch
             {
+                LogLevel.Debug => Level.Debug,
                 LogLevel.Info => Level.Info,
                 LogLevel.Warn => Level.Warn,
                 LogLevel.Error => Level.Error,

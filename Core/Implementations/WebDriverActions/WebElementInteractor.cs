@@ -38,21 +38,21 @@ public class WebElementInteractor
     {
         try
         {
-            Log.InfoFormat("Trying to click the web element with locator \"{0}\".", locator);
+            Log.DebugFormat("Trying to click the web element with locator \"{0}\".", locator);
             Finder.Find(locator).Click();
         }
         catch (StaleElementReferenceException)
         {
             Log.WarnFormat("Web element with the locator \"{0}\" was stale.", locator);
             WaitUntilPageLoaded();
-            Log.InfoFormat("Retrying to click the web element with locator \"{0}\".", locator);
+            Log.DebugFormat("Retrying to click the web element with locator \"{0}\".", locator);
             Finder.Find(locator).Click();
         }
     }
 
     public void ClickJS(By locator)
     {
-        Log.InfoFormat("Trying to click the web element with locator \"{0}\".", locator);
+        Log.DebugFormat("Trying to click the web element with locator \"{0}\".", locator);
         var js = ((IJavaScriptExecutor)Driver);
         var elem = Finder.Find(locator);
         js.ExecuteScript("arguments[0].click();", elem);
@@ -79,7 +79,7 @@ public class WebElementInteractor
 
     public void SendKeys(By locator, string input)
     {
-        Log.InfoFormat("Sending \"{0}\" keys to web element with locator \"{1}\".", input, locator);
+        Log.DebugFormat("Sending \"{0}\" keys to web element with locator \"{1}\".", input, locator);
         Finder.Find(locator).SendKeys(input);
     }
 
@@ -89,10 +89,10 @@ public class WebElementInteractor
         Driver.SetImplicitWait(TimeSpan.Zero);
         try
         {
-            Log.Info("Waiting for page load.");
+            Log.Debug("Waiting for page load.");
             Driver.GetExplicitWait(PageLoadTimeout).Until(
                 dr => ((IJavaScriptExecutor) dr).ExecuteScript("return document.readyState")!.Equals("complete"));
-            Log.Info("Page load ended.");
+            Log.Debug("Page load ended.");
         }
         finally
         {

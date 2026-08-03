@@ -19,9 +19,9 @@ public sealed class WebElementFinder
     {
         try
         {
-            Log.InfoFormat("Trying to find web element with locator \"{0}\".", locator);
+            Log.DebugFormat("Trying to find web element with locator \"{0}\".", locator);
             var elem = Driver.FindElement(locator);
-            Log.InfoFormat("Web element with locator \"{0}\" successfully found.", locator);
+            Log.DebugFormat("Web element with locator \"{0}\" successfully found.", locator);
             return elem;
         }
         catch (Exception)
@@ -34,9 +34,9 @@ public sealed class WebElementFinder
 
     IReadOnlyList<IWebElement> IElementFinder.FindAll(By locator)
     {
-        Log.InfoFormat("Trying to find all web elements with locator \"{0}\".", locator);
+        Log.DebugFormat("Trying to find all web elements with locator \"{0}\".", locator);
         var elems = Driver.FindElements(locator);
-        Log.InfoFormat("Count of found web elements with locator \"{0}\": \"{1}\".", locator, elems.Count);
+        Log.DebugFormat("Count of found web elements with locator \"{0}\": \"{1}\".", locator, elems.Count);
         return elems;
     }
 }
