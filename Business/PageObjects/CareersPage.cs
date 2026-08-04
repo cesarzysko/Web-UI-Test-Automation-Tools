@@ -30,14 +30,13 @@ public sealed class CareersPage
     public CareersPage(IElementInteractor interactor)
         : base(interactor) { }
 
-    public CareersPage SearchForRemotePosition(string keyword, string country)
+    public void SearchForRemotePosition(string keyword, string country)
     {
         Log.InfoFormat("Searching for a remote position with keyword \"{0}\" and county \"{1}\".", keyword, country);
         EnterKeyword(keyword);
         EnterCountry(country);
         CheckRemoteOption();
         ClickSearchButton();
-        return this;
     }
 
     public string GetLatestResult()

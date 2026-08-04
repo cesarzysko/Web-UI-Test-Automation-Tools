@@ -7,13 +7,13 @@ namespace Tests;
 
 public static class ServiceProviderFactory
 {
-    public static ServiceProvider CreateProvider()
+    public static IServiceCollection CreateCollection()
     {
         var sc = new ServiceCollection();
         AddConfiguration(sc);
         AddWebDriver(sc);
         AddPageObjects(sc);
-        return sc.BuildServiceProvider();
+        return sc;
     }
 
     private static void AddConfiguration(ServiceCollection sc)
@@ -43,7 +43,6 @@ public static class ServiceProviderFactory
 
     private static void AddPageObjects(ServiceCollection sc)
     {
-        sc.AddScoped<IPageFactory, PageFactory>(sp => new PageFactory(sp));
         sc.AddTransient<HomePage>(sp =>
         {
             var url = sp.GetRequiredService<IConfig>().Data.MainPageUrl;

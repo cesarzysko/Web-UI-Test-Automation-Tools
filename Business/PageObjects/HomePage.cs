@@ -19,41 +19,43 @@ public sealed class HomePage
         By.ClassName("copyright");
 
     private readonly IGestureController GestureController;
-    private readonly IPageFactory PageFactory;
+    private readonly INavigator Navigator;
+    private readonly string Url;
 
-    public HomePage(string url, INavigator navigator, IElementInteractor interactor, IGestureController gestureController, IPageFactory pageFactory)
+    public HomePage(string url, INavigator navigator, IElementInteractor interactor, IGestureController gestureController)
         : base(interactor)
     {
-        navigator.NavigateToUrl(url);
         GestureController = gestureController;
-        PageFactory = pageFactory;
+        Navigator = navigator;
+        Url = url;
     }
 
-    public HomeCareersPage ClickCareersButton()
+    public void Open()
+    {
+        Navigator.NavigateToUrl(Url);
+    }
+
+    public void ClickCareersButton()
     {
         Log.Info("Clicking the \"Careers\" button.");
         Interactor.Click(CareersBtnLocator);
-        return PageFactory.Create<HomeCareersPage>();
     }
 
-    public HomeSearchWidget ClickMagnifierButton()
+    public void ClickMagnifierButton()
     {
         Log.Info("Clicking the \"Magnifier\" icon button.");
         Interactor.Click(MagnifierBtnLocator);
-        return PageFactory.Create<HomeSearchWidget>();
     }
 
-    public HomeFooterWidget GoToFooter()
+    public void GoToFooter()
     {
         Log.Info("Scrolling down to the footer.");
         GestureController.ScrollToElement(FooterLocator);
-        return PageFactory.Create<HomeFooterWidget>();
     }
 
-    public HomeInsightsPage ClickInsightsButton()
+    public void ClickInsightsButton()
     {
         Log.Info("Clicking the \"Insights\" button.");
         Interactor.Click(InsightsBtnLocator);
-        return PageFactory.Create<HomeInsightsPage>();
     }
 }

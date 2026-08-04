@@ -9,18 +9,12 @@ public sealed class HomeCareersPage
     private static readonly By StartYourSearchBtnLocator =
         By.PartialLinkText("START YOUR SEARCH");
 
-    private readonly IPageFactory PageFactory;
+    public HomeCareersPage(IElementInteractor interactor)
+        : base(interactor) { }
 
-    public HomeCareersPage(IElementInteractor interactor, IPageFactory pageFactory)
-        : base(interactor)
-    {
-        PageFactory = pageFactory;
-    }
-
-    public CareersPage ClickStartYourSearchHereButton()
+    public void ClickStartYourSearchHereButton()
     {
         Log.Info("Clicking the \"START YOUR SEARCH HERE\" button.");
         Interactor.Click(StartYourSearchBtnLocator);
-        return PageFactory.Create<CareersPage>();
     }
 }

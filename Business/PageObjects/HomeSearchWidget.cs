@@ -12,25 +12,18 @@ public sealed class HomeSearchWidget
     private static readonly By SearchBtnLocator =
         By.ClassName("custom-search-button");
 
-    private readonly IPageFactory PageFactory;
+    public HomeSearchWidget(IElementInteractor interactor)
+        : base(interactor) { }
 
-    public HomeSearchWidget(IElementInteractor interactor, IPageFactory pageFactory)
-        : base(interactor)
-    {
-        PageFactory = pageFactory;
-    }
-
-    public HomeSearchWidget EnterSearchInput(string input)
+    public void EnterSearchInput(string input)
     {
         Log.InfoFormat("Entering \"{0}\" into the \"Search\" text input.", input);
         Interactor.SendKeys(SearchInputLocator, input);
-        return this;
     }
 
-    public HomeSearchResultsPage ClickSearchButton()
+    public void ClickSearchButton()
     {
         Log.Info("Clicking the \"Search\" button.");
         Interactor.Click(SearchBtnLocator);
-        return PageFactory.Create<HomeSearchResultsPage>();
     }
 }

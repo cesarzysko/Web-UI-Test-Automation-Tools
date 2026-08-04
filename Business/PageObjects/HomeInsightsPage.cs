@@ -22,13 +22,11 @@ public sealed class HomeInsightsPage
         By.CssSelector("div.owl-item.active a.custom-link");
 
     private readonly IGestureController GestureController;
-    private readonly IPageFactory PageFactory;
 
-    public HomeInsightsPage(IElementInteractor interactor, IGestureController gestureController, IPageFactory pageFactory)
+    public HomeInsightsPage(IElementInteractor interactor, IGestureController gestureController)
         : base(interactor)
     {
         GestureController = gestureController;
-        PageFactory = pageFactory;
     }
 
     public HomeInsightsPage SwipeCarousel(int swipes)
@@ -45,18 +43,17 @@ public sealed class HomeInsightsPage
         return this;
     }
 
-    public HomeInsightsPage GetCurrentArticleName(out string name)
+    public string GetCurrentArticleName()
     {
         Log.Info("Reading the text from the current article in the carousel.");
-        name = Interactor.GetText(ArticleNameLocator);
+        string name = Interactor.GetText(ArticleNameLocator);
         Log.InfoFormat("Text from the current article in the carousel: \"{0}\".", name);
-        return this;
+        return name;
     }
 
-    public InsightsBlogPage ClickReadMoreButtonForCurrentArticle()
+    public void ClickReadMoreButtonForCurrentArticle()
     {
         Log.Info("Clicking the \"Read More\" button for the current article on the carousel.");
         Interactor.Click(ArticleReadMoreBtnLocator);
-        return PageFactory.Create<InsightsBlogPage>();
     }
 }
