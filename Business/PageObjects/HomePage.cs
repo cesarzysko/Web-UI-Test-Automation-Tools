@@ -18,6 +18,9 @@ public sealed class HomePage
     private static readonly By FooterLocator =
         By.ClassName("copyright");
 
+    private static readonly By MainNavigatorLocator = // language=XPath
+        By.XPath("//button[contains(@class, 'hamburger-menu__button')]");
+
     private readonly IGestureController GestureController;
     private readonly INavigator Navigator;
     private readonly string Url;
@@ -57,5 +60,11 @@ public sealed class HomePage
     {
         Log.Info("Clicking the \"Insights\" button.");
         Interactor.Click(InsightsBtnLocator);
+    }
+
+    public void ClickMainNavigationButton()
+    {
+        Log.Info("Clicking the \"Main Navigation\" button.");
+        Interactor.Click(MainNavigatorLocator);
     }
 }

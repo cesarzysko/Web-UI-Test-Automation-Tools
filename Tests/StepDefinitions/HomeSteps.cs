@@ -4,7 +4,7 @@ using TechTalk.SpecFlow;
 namespace Tests;
 
 [Binding]
-public class HomeSteps
+public sealed class HomeSteps
 {
     private readonly HomePage HomePage;
 
@@ -41,5 +41,11 @@ public class HomeSteps
     public void WhenIClickTheCareersButton()
     {
         HomePage.ClickCareersButton();
+    }
+
+    [When("I click the Main Navigation menu button")]
+    public void WhenIClickTheMainNavigationMenuButton()
+    {
+        HomePage.ClickMainNavigationButton();
     }
 }

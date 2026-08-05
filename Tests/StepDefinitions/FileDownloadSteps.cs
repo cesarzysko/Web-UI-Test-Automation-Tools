@@ -4,7 +4,7 @@ using TechTalk.SpecFlow;
 namespace Tests;
 
 [Binding]
-public class FileDownloadSteps
+public sealed class FileDownloadSteps
 {
     private static readonly TimeSpan DownloadTimeout = TimeSpan.FromSeconds(5);
 

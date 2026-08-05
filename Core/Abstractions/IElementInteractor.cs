@@ -12,4 +12,5 @@ public interface IElementInteractor
     void ClickWithInterceptFallback(By locator, Action onClickIntercepted);
     void SendKeysWithEnter(By locator, string input);
     void SendKeys(By locator, string input);
+    bool Exists(By locator);
 }

@@ -5,7 +5,7 @@ using TechTalk.SpecFlow;
 namespace Tests;
 
 [Binding]
-public class HomeSearchResultsSteps
+public sealed class HomeSearchResultsSteps
 {
     private readonly HomeSearchResultsPage HomeSearchResultsPage;
 

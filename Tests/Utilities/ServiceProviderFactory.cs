@@ -55,5 +55,9 @@ public static class ServiceProviderFactory
         sc.AddTransient<HomeSearchResultsPage>();
         sc.AddTransient<HomeSearchWidget>();
         sc.AddTransient<InsightsBlogPage>();
+        sc.AddTransient<MainNavWidget>();
+        sc.AddTransient<ServicesNavCtx>();
+        sc.AddTransient<ServiceSelectorCtx>();
+        sc.AddTransient<ServicePage>();
     }
 }

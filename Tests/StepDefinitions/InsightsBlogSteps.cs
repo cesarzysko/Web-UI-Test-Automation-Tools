@@ -4,7 +4,7 @@ using TechTalk.SpecFlow;
 namespace Tests;
 
 [Binding]
-public class InsightsBlogSteps
+public sealed class InsightsBlogSteps
 {
     private readonly InsightsBlogPage InsightsBlogPage;
     private readonly ScenarioContext Ctx;

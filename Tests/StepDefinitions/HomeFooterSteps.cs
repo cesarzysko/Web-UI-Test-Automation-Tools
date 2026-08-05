@@ -4,7 +4,7 @@ using TechTalk.SpecFlow;
 namespace Tests;
 
 [Binding]
-public class HomeFooterSteps
+public sealed class HomeFooterSteps
 {
     private readonly HomeFooterWidget HomeFooterWidget;
 
