@@ -75,14 +75,13 @@ namespace Tests.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Navigating to a service category from the Services menu shows the correct page")]
-        [NUnit.Framework.TestCaseAttribute("Generative AI", "Generative AI", null)]
-        [NUnit.Framework.TestCaseAttribute("Responsible AI", "Responsible AI Assessment & Services", null)]
-        public void NavigatingToAServiceCategoryFromTheServicesMenuShowsTheCorrectPage(string serviceCategory, string pageTitle, string[] exampleTags)
+        [NUnit.Framework.TestCaseAttribute("Generative AI", null)]
+        [NUnit.Framework.TestCaseAttribute("Responsible AI", null)]
+        public void NavigatingToAServiceCategoryFromTheServicesMenuShowsTheCorrectPage(string serviceCategory, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("ServiceCategory", serviceCategory);
-            argumentsOfScenario.Add("PageTitle", pageTitle);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigating to a service category from the Services menu shows the correct page", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 3
 this.ScenarioInitialize(scenarioInfo);
@@ -110,7 +109,7 @@ this.ScenarioInitialize(scenarioInfo);
     testRunner.And(string.Format("I select the {0} category", serviceCategory), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 9
-    testRunner.Then(string.Format("the page title should be {0}", pageTitle), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+    testRunner.Then(string.Format("the page title should be {0}", serviceCategory), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 10
     testRunner.And("the Our Related Expertise section should be displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");

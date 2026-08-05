@@ -7,7 +7,7 @@ public sealed class ServicePage
     : PageBase
 {
     private static readonly By TitleLocator = // language=XPath
-        By.XPath("//main//p[contains(@class, 'scaling-of-text-wrapper')]");
+        By.XPath("//main//p[contains(@class, 'scaling-of-text-wrapper')]//span[not(*)]");
 
     private static readonly By RelatedExpertiseLocator = // language=XPath
         By.XPath("//main//span[contains(text(), 'Our Related Expertise')]");

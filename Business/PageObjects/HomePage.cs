@@ -65,6 +65,7 @@ public sealed class HomePage
     public void ClickMainNavigationButton()
     {
         Log.Info("Clicking the \"Main Navigation\" button.");
+        Thread.Sleep(1000); // Better solution would be to wait until page fully loads to prevent the panel closing
         Interactor.Click(MainNavigatorLocator);
     }
 }
