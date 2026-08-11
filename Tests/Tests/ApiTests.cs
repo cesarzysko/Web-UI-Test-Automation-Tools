@@ -12,29 +12,28 @@ public sealed class ApiTests
     [Test]
     public void GetUsers_ValidRequest_ReturnsUsersWithRequiredFields()
     {
-        Log.Info("Sending request to retrieve list of users");
+        Log.Info("Sending request to retrieve list of users.");
         var response = Client.GetUsers();
 
-        Log.Info("Validating response status code");
+        Log.Info("Validating response status code.");
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
         Assert.That(response.ErrorMessage, Is.Null.Or.Empty);
 
-        Log.Info("Validating each user contains required fields");
+        Log.Info("Validating each user contains required fields.");
         var users = response.Data;
         Assert.That(users, Is.Not.Null.And.Not.Empty);
-
         Assert.Multiple(() =>
         {
             foreach (var user in users)
             {
-                Assert.That(user.Id, Is.GreaterThan(0), "Id should be present");
-                Assert.That(user.Name, Is.Not.Null.And.Not.Empty, "Name should be present");
-                Assert.That(user.Username, Is.Not.Null.And.Not.Empty, "Username should be present");
-                Assert.That(user.Email, Is.Not.Null.And.Not.Empty, "Email should be present");
-                Assert.That(user.Address, Is.Not.Null, "Address should be present");
-                Assert.That(user.Phone, Is.Not.Null.And.Not.Empty, "Phone should be present");
-                Assert.That(user.Website, Is.Not.Null.And.Not.Empty, "Website should be present");
-                Assert.That(user.Company, Is.Not.Null, "Company should be present");
+                Assert.That(user.Id, Is.GreaterThan(0), "Id should be present.");
+                Assert.That(user.Name, Is.Not.Null.And.Not.Empty, "Name should be present.");
+                Assert.That(user.Username, Is.Not.Null.And.Not.Empty, "Username should be present.");
+                Assert.That(user.Email, Is.Not.Null.And.Not.Empty, "Email should be present.");
+                Assert.That(user.Address, Is.Not.Null, "Address should be present.");
+                Assert.That(user.Phone, Is.Not.Null.And.Not.Empty, "Phone should be present.");
+                Assert.That(user.Website, Is.Not.Null.And.Not.Empty, "Website should be present.");
+                Assert.That(user.Company, Is.Not.Null, "Company should be present.");
             }
         });
     }
@@ -42,77 +41,70 @@ public sealed class ApiTests
     [Test]
     public void GetUsers_ValidRequest_HeaderIsJsonUtf8()
     {
-        Log.Info("Sending request to retrieve list of users");
+        Log.Info("Sending request to retrieve list of users.");
         var response = Client.GetUsers();
 
-        Log.Info("Validating response status code");
+        Log.Info("Validating response status code.");
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
         Assert.That(response.ErrorMessage, Is.Null.Or.Empty);
 
-        Log.Info("Validating content-type header");
+        Log.Info("Validating Content-Type header.");
         var contentTypeHeader = response.ContentHeaders?
             .FirstOrDefault(h => h.Name.Equals("Content-Type", StringComparison.OrdinalIgnoreCase));
-        Assert.Multiple(() =>
-        {
-            Assert.That(contentTypeHeader, Is.Not.Null, "Content-Type header should be present");
-            Assert.That(contentTypeHeader?.Value, Is.EqualTo("application/json; charset=utf-8"));
-        });
+        Assert.That(contentTypeHeader, Is.Not.Null, "Content-Type header should be present.");
+        Assert.That(contentTypeHeader?.Value, Is.EqualTo("application/json; charset=utf-8"));
     }
 
     [Test]
     public void GetUsers_ValidRequest_ReturnsUsersWithValidFields()
     {
-        Log.Info("Sending request to retrieve list of users");
+        Log.Info("Sending request to retrieve list of users.");
         var response = Client.GetUsers();
 
-        Log.Info("Validating response status code");
+        Log.Info("Validating response status code.");
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
         Assert.That(response.ErrorMessage, Is.Null.Or.Empty);
 
-        Log.Info("Validating user list contains 10 unique, valid users");
+        Log.Info("Validating user list contains 10 unique, valid users.");
         var users = response.Data;
         Assert.That(users, Is.Not.Null);
-
         Assert.Multiple(() =>
         {
             Assert.That(users, Has.Count.EqualTo(10),
-                "Response should contain exactly 10 users");
+                "Response should contain exactly 10 users.");
             Assert.That(users.Select(u => u.Id), Is.Unique,
-                "Each user should have a different Id");
+                "Each user should have a different Id.");
             Assert.That(users, Has.All.Matches<User>(u => !string.IsNullOrEmpty(u.Name)),
-                "Each user should have a non-empty Name");
+                "Each user should have a non-empty Name.");
             Assert.That(users, Has.All.Matches<User>(u => !string.IsNullOrEmpty(u.Username)),
-                "Each user should have a non-empty Username");
+                "Each user should have a non-empty Username.");
             Assert.That(users, Has.All.Matches<User>(u => !string.IsNullOrEmpty(u.Company.Name)),
-                "Each user should have a non-empty Company Name");
+                "Each user should have a non-empty Company Name.");
         });
     }
 
     [Test]
     public void PostUser_ValidRequestWithNameAndUsername_ReturnsNotEmptyWithId()
     {
-        Log.Info("Sending request to create a new user");
+        Log.Info("Sending request to create a new user.");
         var response = Client.CreateUser("Foo Bar", "foobar");
 
-        Log.Info("Validating response status code");
+        Log.Info("Validating response status code.");
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created));
         Assert.That(response.ErrorMessage, Is.Null.Or.Empty);
 
-        Log.Info("Validating created user is returned with an Id");
-        Assert.Multiple(() =>
-        {
-            Assert.That(response.Data, Is.Not.Null, "Response body should not be empty");
-            Assert.That(response.Data?.Id, Is.GreaterThan(0), "Created user should have an Id");
-        });
+        Log.Info("Validating created user is returned with an Id.");
+        Assert.That(response.Data, Is.Not.Null, "Response body should not be empty.");
+        Assert.That(response.Data.Id, Is.GreaterThan(0), "Created user should have an Id.");
     }
 
     [Test]
     public void GetInvalidEndpoint_InvalidRequest_ReturnsNotFoundCode()
     {
-        Log.Info("Sending request to a non-existent endpoint");
+        Log.Info("Sending request to a non-existent endpoint.");
         var response = Client.GetInvalidEndpoint();
 
-        Log.Info("Validating response status code");
+        Log.Info("Validating response status code.");
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         Assert.That(response.ErrorMessage, Is.Null.Or.Empty);
     }

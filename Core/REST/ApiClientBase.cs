@@ -21,17 +21,17 @@ public abstract class ApiClientBase
     protected RestResponse<T> Execute<T>(RestRequest request)
         where T : notnull
     {
-        Log.InfoFormat("Sending {0} request to {1}", request.Method, request.Resource);
+        Log.InfoFormat("Sending \"{0}\" request to \"{1}\".", request.Method, request.Resource);
         var response = Client.Execute<T>(request);
-        Log.InfoFormat("Received {0} {1}", (int)response.StatusCode, response.StatusCode);
+        Log.InfoFormat("Received \"{0} {1}\".", (int)response.StatusCode, response.StatusCode);
         return response;
     }
 
     protected RestResponse Execute(RestRequest request)
     {
-        Log.InfoFormat("Sending {0} request to {1}", request.Method, request.Resource);
+        Log.InfoFormat("Sending \"{0}\" request to \"{1}\".", request.Method, request.Resource);
         var response = Client.Execute(request);
-        Log.InfoFormat("Received {0} {1}", (int)response.StatusCode, response.StatusCode);
+        Log.InfoFormat("Received \"{0} {1}\".", (int)response.StatusCode, response.StatusCode);
         return response;
     }
 }
