@@ -8,7 +8,8 @@ namespace Business.Clients;
 public sealed class JsonPlaceholderClient
     : ApiClientBase
 {
-    public JsonPlaceholderClient(ApiSettings settings) : base(settings) { }
+    public JsonPlaceholderClient(ApiSettings settings)
+        : base(settings) { }
 
     public RestResponse<List<User>> GetUsers()
     {
