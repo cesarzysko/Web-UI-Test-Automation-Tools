@@ -10,6 +10,7 @@ public abstract class SeleniumTestBase
 {
     protected HomePage HomePage
         => TestScope.ServiceProvider.GetRequiredService<IPageFactory>().Create<HomePage>();
+
     protected IDownloadWaiter DownloadWaiter
         => TestScope.ServiceProvider.GetRequiredService<IDownloadWaiter>();
 
