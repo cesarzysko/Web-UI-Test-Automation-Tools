@@ -50,24 +50,24 @@ public sealed class ApiTests
     [Test]
     public void GetUsers_ValidRequest_HeaderIsJsonUtf8()
     {
-
+        Assert.Fail();
     }
 
     [Test]
     public void GetUsers_ValidRequest_ReturnsUsersWithValidFields()
     {
-
+        Assert.Fail();
     }
 
     [Test]
     public void PostUser_ValidRequestWithNameAndUsername_ReturnsNotEmptyWithId()
     {
-
+        Assert.Fail();
     }
 
     [Test]
     public void GetInvalidEndpoint_InvalidRequest_ReturnsNotFoundCode()
     {
-
+        Assert.Fail();
     }
 }
