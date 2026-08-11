@@ -5,8 +5,15 @@ using RestSharp;
 
 namespace Business.Clients;
 
+public interface IJsonPlaceholderClient
+{
+    RestResponse<List<User>> GetUsers();
+    RestResponse<User> CreateUser(string name, string username);
+    RestResponse GetInvalidEndpoint();
+}
+
 public sealed class JsonPlaceholderClient
-    : ApiClientBase
+    : ApiClientBase, IJsonPlaceholderClient
 {
     public JsonPlaceholderClient(ApiSettings settings)
         : base(settings) { }

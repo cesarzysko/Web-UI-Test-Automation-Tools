@@ -6,6 +6,6 @@ namespace Tests;
 public abstract class ApiTestBase
     : TestBase
 {
-    protected JsonPlaceholderClient Client
-        => TestScope.ServiceProvider.GetRequiredService<JsonPlaceholderClient>();
+    protected IJsonPlaceholderClient Client
+        => TestScope.ServiceProvider.GetRequiredService<IJsonPlaceholderClient>();
 }

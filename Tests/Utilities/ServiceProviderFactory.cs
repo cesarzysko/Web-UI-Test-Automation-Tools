@@ -63,6 +63,6 @@ public static class ServiceProviderFactory
     private static void AddRest(ServiceCollection sc)
     {
         sc.AddSingleton<ApiSettings>(sp => sp.GetRequiredService<IConfig>().Data.ApiSettings);
-        sc.AddScoped<JsonPlaceholderClient>();
+        sc.AddScoped<IJsonPlaceholderClient, JsonPlaceholderClient>();
     }
 }
