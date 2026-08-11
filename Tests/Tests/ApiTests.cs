@@ -91,12 +91,29 @@ public sealed class ApiTests
     [Test]
     public void PostUser_ValidRequestWithNameAndUsername_ReturnsNotEmptyWithId()
     {
-        Assert.Fail();
+        Log.Info("Sending request to create a new user");
+        var response = Client.CreateUser("Foo Bar", "foobar");
+
+        Log.Info("Validating response status code");
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created));
+        Assert.That(response.ErrorMessage, Is.Null.Or.Empty);
+
+        Log.Info("Validating created user is returned with an Id");
+        Assert.Multiple(() =>
+        {
+            Assert.That(response.Data, Is.Not.Null, "Response body should not be empty");
+            Assert.That(response.Data?.Id, Is.GreaterThan(0), "Created user should have an Id");
+        });
     }
 
     [Test]
     public void GetInvalidEndpoint_InvalidRequest_ReturnsNotFoundCode()
     {
-        Assert.Fail();
+        Log.Info("Sending request to a non-existent endpoint");
+        var response = Client.GetInvalidEndpoint();
+
+        Log.Info("Validating response status code");
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+        Assert.That(response.ErrorMessage, Is.Null.Or.Empty);
     }
 }
