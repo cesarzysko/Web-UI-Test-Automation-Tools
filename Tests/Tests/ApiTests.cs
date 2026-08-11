@@ -41,7 +41,19 @@ public sealed class ApiTests
     [Test]
     public void GetUsers_ValidRequest_HeaderIsJsonUtf8()
     {
-        Assert.Fail();
+        Log.Info("Sending request to retrieve list of users");
+        var response = Client.GetUsers();
+
+        Log.Info("Validating response status code");
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+        Assert.That(response.ErrorMessage, Is.Null.Or.Empty);
+
+        Log.Info("Validating content-type header");
+        Assert.Multiple(() =>
+        {
+            Assert.That(response.ContentType, Is.Not.Null.And.Not.Empty, "Content-Type header should be present");
+            Assert.That(response.ContentType, Is.EqualTo("application/json; charset=utf-8"));
+        });
     }
 
     [Test]
