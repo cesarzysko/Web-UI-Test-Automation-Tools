@@ -15,26 +15,38 @@ public interface IJsonPlaceholderClient
 public sealed class JsonPlaceholderClient
     : ApiClientBase, IJsonPlaceholderClient
 {
+    private const string UsersEndpoint = "/users";
+    private const string InvalidEndpoint = "/invalidendpoint";
+
     public JsonPlaceholderClient(ApiSettings settings)
         : base(settings) { }
 
     public RestResponse<List<User>> GetUsers()
     {
-        var request = new RestRequest("/users", Method.Get)
-            .AddHeader("Accept", "application/json");
+        var request = new RequestBuilder()
+            .WithResource(UsersEndpoint)
+            .WithMethod(Method.Get)
+            .WithHeader("Accept", "application/json")
+            .Build();
         return Execute<List<User>>(request);
     }
 
     public RestResponse<User> CreateUser(string name, string username)
     {
-        var request = new RestRequest("/users", Method.Post)
-            .AddJsonBody(new { name, username });
+        var request = new RequestBuilder()
+            .WithResource(UsersEndpoint)
+            .WithMethod(Method.Post)
+            .WithJsonBody(new { name, username })
+            .Build();
         return Execute<User>(request);
     }
 
     public RestResponse GetInvalidEndpoint()
     {
-        var request = new RestRequest("/invalidendpoint", Method.Get);
+        var request = new RequestBuilder()
+            .WithResource(InvalidEndpoint)
+            .WithMethod(Method.Get)
+            .Build();
         return Execute(request);
     }
 }
