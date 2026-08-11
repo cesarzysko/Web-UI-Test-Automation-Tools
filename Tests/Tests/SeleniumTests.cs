@@ -4,8 +4,9 @@ namespace Tests;
 
 [FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
 [Parallelizable(ParallelScope.All)]
-public sealed class Tests
-    : TestBase
+[Category("Selenium")]
+public sealed class SeleniumTests
+    : SeleniumTestBase
 {
     private static readonly TimeSpan DownloadTimeout = TimeSpan.FromSeconds(5);
 

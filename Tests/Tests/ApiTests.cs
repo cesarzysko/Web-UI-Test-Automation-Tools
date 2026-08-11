@@ -5,6 +5,7 @@ using RestSharp;
 
 namespace Tests;
 
+[FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
 [Parallelizable(ParallelScope.All)]
 [Category("API")]
 public sealed class ApiTests
