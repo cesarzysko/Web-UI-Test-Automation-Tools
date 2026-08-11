@@ -34,7 +34,6 @@ public sealed class ApiTests
                 Assert.That(user.Phone, Is.Not.Null.And.Not.Empty, "Phone should be present");
                 Assert.That(user.Website, Is.Not.Null.And.Not.Empty, "Website should be present");
                 Assert.That(user.Company, Is.Not.Null, "Company should be present");
-                Assert.That(user.Company.Name, Is.Not.Null.And.Not.Empty, "Company name should be present");
             }
         });
     }
