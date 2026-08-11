@@ -1,4 +1,4 @@
-using Core.REST;
+using Business.Clients;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Tests;
@@ -6,6 +6,6 @@ namespace Tests;
 public abstract class ApiTestBase
     : TestBase
 {
-    protected ApiClient Client
-        => TestScope.ServiceProvider.GetRequiredService<ApiClient>();
+    protected JsonPlaceholderClient Client
+        => TestScope.ServiceProvider.GetRequiredService<JsonPlaceholderClient>();
 }

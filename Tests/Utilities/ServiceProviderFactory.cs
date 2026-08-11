@@ -1,6 +1,6 @@
 using Business;
+using Business.Clients;
 using Core;
-using Core.REST;
 using Microsoft.Extensions.DependencyInjection;
 using OpenQA.Selenium;
 
@@ -63,6 +63,6 @@ public static class ServiceProviderFactory
     private static void AddRest(ServiceCollection sc)
     {
         sc.AddSingleton<ApiSettings>(sp => sp.GetRequiredService<IConfig>().Data.ApiSettings);
-        sc.AddScoped<ApiClient>();
+        sc.AddScoped<JsonPlaceholderClient>();
     }
 }

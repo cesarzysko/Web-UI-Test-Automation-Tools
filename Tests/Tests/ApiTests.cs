@@ -1,7 +1,4 @@
 using System.Net;
-using Business.Models;
-using log4net;
-using RestSharp;
 
 namespace Tests;
 
@@ -11,17 +8,11 @@ namespace Tests;
 public sealed class ApiTests
     : ApiTestBase
 {
-    private static ILog Log => LogManager.GetLogger(typeof(ApiTests));
-
     [Test]
     public void GetUsers_ValidRequest_ReturnsUsersWithRequiredFields()
     {
-        Log.Info("Building GET request for /users");
-        var request = new RestRequest("/users", Method.Get)
-            .AddHeader("Accept", "application/json");
-
         Log.Info("Sending request to retrieve list of users");
-        var response = Client.Execute<List<User>>(request);
+        var response = Client.GetUsers();
 
         Log.Info("Validating response status code");
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));

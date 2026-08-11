@@ -1,3 +1,4 @@
+using log4net;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Tests;
@@ -5,6 +6,8 @@ namespace Tests;
 public abstract class TestBase
 {
     protected IServiceScope TestScope { get; private set; }
+
+    protected ILog Log => LogManager.GetLogger(GetType());
 
     [SetUp]
     public virtual void SetUp()
