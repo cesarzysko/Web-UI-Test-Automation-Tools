@@ -1,5 +1,6 @@
 using Business;
 using Core;
+using Core.REST;
 using Microsoft.Extensions.DependencyInjection;
 using OpenQA.Selenium;
 
@@ -13,6 +14,7 @@ public static class ServiceProviderFactory
         AddConfiguration(sc);
         AddWebDriver(sc);
         AddPageObjects(sc);
+        AddRest(sc);
         return sc.BuildServiceProvider();
     }
 
@@ -56,5 +58,11 @@ public static class ServiceProviderFactory
         sc.AddTransient<HomeSearchResultsPage>();
         sc.AddTransient<HomeSearchWidget>();
         sc.AddTransient<InsightsBlogPage>();
+    }
+
+    private static void AddRest(ServiceCollection sc)
+    {
+        sc.AddSingleton<ApiSettings>(sp => sp.GetRequiredService<IConfig>().Data.ApiSettings);
+        sc.AddScoped<ApiClient>();
     }
 }
