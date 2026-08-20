@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    triggers {
+        cron('10 22 * * *')
+    }
+
     environment {
         DOTNET_CLI_TELEMETRY_OUTPUT = '1'
         DOTNET_NOLOGO = 'true'
