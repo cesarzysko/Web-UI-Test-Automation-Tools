@@ -23,16 +23,32 @@ pipeline {
         stage('Selenium Tests') {
             steps {
                 catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-                    bat 'dotnet test --configuration Release --no-build --filter "Category=Selenium" --logger "console;verbosity=normal"'
+                    bat '''
+                        dotnet test --configuration Release --no-build ^
+                            --filter "Category=Selenium" ^
+                            --logger "trx;LogFileName=selenium-tests.trx" ^
+                            --results-directory TestResults/Selenium
+                    '''
                 }
             }
         }
 
         stage('API Tests') {
             steps {
-                bat 'dotnet test --configuration Release --no-build --filter "Category=API" --logger "console;verbosity=normal"'
+                bat '''
+                    dotnet test --configuration Release --no-build ^
+                        --filter "Category=API" ^
+                        --logger "trx;LogFileName=api-tests.trx" ^
+                        --results-directory TestResults/API ^
+                '''
             }
         }
 
+    }
+
+    post {
+        always {
+            mstest testResultsFile: 'TestResults/**/*.trx'
+        }
     }
 }
