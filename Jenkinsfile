@@ -20,9 +20,17 @@ pipeline {
             }
         }
 
-        stage('Tests') {
+        stage('Selenium Tests') {
             steps {
-                bat 'dotnet test --configuration Release --no-build'
+                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                    bat 'dotnet test --configuration Release --no-build --filter "Category=Selenium"'
+                }
+            }
+        }
+
+        stage('API Tests') {
+            steps {
+                bat 'dotnet test --configuration Release --no-build --filter "Category=API"'
             }
         }
 
