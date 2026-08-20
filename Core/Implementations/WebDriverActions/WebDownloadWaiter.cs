@@ -6,8 +6,11 @@ namespace Core;
 public sealed class WebDownloadWaiter
     : IDownloadWaiter
 {
-    private const string TempFileName = ".org.chromium.Chromium";
-    private const string AltTempFileName = ".crdownload";
+    private static readonly string[] TempFileNames = [
+        ".org.chromium.Chromium",
+        ".crdownload",
+        ".tmp"
+    ];
 
     private static readonly TimeSpan DownloadSleepTime = TimeSpan.FromMilliseconds(50);
 
@@ -60,6 +63,6 @@ public sealed class WebDownloadWaiter
 
     private IReadOnlyList<string> GetDownloadedFileNames()
     {
-        return Directory.GetFiles(DownloadPath).WhereNotContainsAny(TempFileName, AltTempFileName);
+        return Directory.GetFiles(DownloadPath).WhereNotContainsAny(TempFileNames);
     }
 }

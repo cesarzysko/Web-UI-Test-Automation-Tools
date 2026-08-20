@@ -3,7 +3,6 @@
 namespace Tests;
 
 [FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
-[Parallelizable(ParallelScope.All)]
 [Category("Selenium")]
 public sealed class SeleniumTests
     : SeleniumTestBase
