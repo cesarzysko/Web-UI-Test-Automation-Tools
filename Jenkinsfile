@@ -39,7 +39,7 @@ pipeline {
                     dotnet test --configuration Release --no-build ^
                         --filter "Category=API" ^
                         --logger "trx;LogFileName=api-tests.trx" ^
-                        --results-directory TestResults/API ^
+                        --results-directory TestResults/API
                 '''
             }
         }
