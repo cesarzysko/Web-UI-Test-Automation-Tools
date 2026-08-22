@@ -17,12 +17,13 @@ public sealed class WebScreenshotTaker
 
     private static ILog Log => LogManager.GetLogger(typeof(WebScreenshotTaker));
 
-    void IScreenshotTaker.TakeScreenshot(string name)
+    string IScreenshotTaker.TakeScreenshot(string name)
     {
         var screenshot = ((ITakesScreenshot)Driver).GetScreenshot();
         var filePath = GetScreenshotPath(name);
         Log.InfoFormat("Saving screenshot at \"{0}\".", filePath);
         screenshot.SaveAsFile(filePath);
+        return filePath;
     }
 
     private string GetScreenshotPath(string name)

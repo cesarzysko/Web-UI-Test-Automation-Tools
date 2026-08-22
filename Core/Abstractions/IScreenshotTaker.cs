@@ -2,5 +2,5 @@ namespace Core;
 
 public interface IScreenshotTaker
 {
-    void TakeScreenshot(string name);
+    string TakeScreenshot(string name);
 }
