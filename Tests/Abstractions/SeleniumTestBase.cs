@@ -37,7 +37,7 @@ public abstract class SeleniumTestBase
 
         var path = ScreenshotTaker.TakeScreenshot(TestContext.CurrentContext.Test.FullName);
         TestContext.AddTestAttachment(path, "Failure screenshot");
-        TestContext.Out.WriteLine($"[[Attachment|{path}]]");
+        TestContext.Out.WriteLine($"[[ATTACHMENT|{path}]]");
     }
 
     private void HandleLogs()
@@ -62,7 +62,7 @@ public abstract class SeleniumTestBase
             }
 
             TestContext.AddTestAttachment(path, "Test log");
-            TestContext.Out.WriteLine($"[[Attachment|{path}]]");
+            TestContext.Out.WriteLine($"[[ATTACHMENT|{path}]]");
         }
     }
 }
