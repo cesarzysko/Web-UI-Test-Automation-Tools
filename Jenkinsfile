@@ -63,6 +63,8 @@ pipeline {
     post {
         always {
             mstest testResultsFile: 'TestResults/**/*.trx'
+
+            archiveArtifacts artifacts: 'Logs/**/*', allowEmptyArchive: true
         }
     }
 }
