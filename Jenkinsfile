@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    options {
+        skipDefaultCheckout(true)
+    }
+
     parameters {
         choice(
             name: 'SELENIUM_BROWSER',
@@ -19,6 +23,13 @@ pipeline {
     }
 
     stages {
+
+        stage('Checkout') {
+            steps {
+                cleanWs()
+                checkout scm
+            }
+        }
 
         stage('Restore') {
             steps {
@@ -64,7 +75,10 @@ pipeline {
         always {
             mstest testResultsFile: 'TestResults/**/*.trx'
 
-            archiveArtifacts artifacts: 'Logs/**/*', allowEmptyArchive: true
+            archiveArtifacts (
+                artifacts: 'Tests/bin/Release/net10.0/Logs/**/*',
+                allowEmptyArchive: true
+            )
         }
     }
 }
