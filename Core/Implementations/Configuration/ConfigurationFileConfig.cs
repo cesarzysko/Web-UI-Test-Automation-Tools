@@ -10,6 +10,7 @@ public sealed class ConfigurationFileConfig
     public ConfigData Data { get; } = new ConfigurationBuilder()
         .SetBasePath(AppContext.BaseDirectory)
         .AddJsonFile(ConfigPath, optional: false, reloadOnChange: false)
+        .AddEnvironmentVariables()
         .Build()
         .Get<ConfigData>()!;
 }
