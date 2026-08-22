@@ -1,6 +1,5 @@
 using Business;
 using Core;
-using log4net;
 using log4net.Appender;
 using log4net.Repository.Hierarchy;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,13 +37,12 @@ public abstract class SeleniumTestBase
 
         var path = ScreenshotTaker.TakeScreenshot(TestContext.CurrentContext.Test.FullName);
         TestContext.AddTestAttachment(path, "Failure screenshot");
+        TestContext.Out.WriteLine($"[[Attachment|{path}]]");
     }
 
-    private static void HandleLogs()
+    private void HandleLogs()
     {
-        var log = LogManager.GetLogger(typeof(SeleniumTestBase));
-
-        var hierarchy = (Hierarchy?)log.Logger.Repository;
+        var hierarchy = (Hierarchy?)Log.Logger.Repository;
         if (hierarchy == null)
         {
             return;
@@ -57,12 +55,14 @@ public abstract class SeleniumTestBase
                 continue;
             }
 
-            if (string.IsNullOrWhiteSpace(fileAppender.File))
+            string? path = fileAppender.File;
+            if (string.IsNullOrWhiteSpace(path))
             {
                 continue;
             }
 
-            TestContext.AddTestAttachment(fileAppender.File, "Test log");
+            TestContext.AddTestAttachment(path, "Test log");
+            TestContext.Out.WriteLine($"[[Attachment|{path}]]");
         }
     }
 }
