@@ -73,12 +73,16 @@ pipeline {
 
     post {
         always {
-            mstest testResultsFile: 'TestResults/**/*.trx'
-
             archiveArtifacts (
                 artifacts: 'Tests/bin/Release/net10.0/Logs/**/*',
                 allowEmptyArchive: true
             )
+
+            bat '''
+                trx2junit "TestResults\\Selenium\\*.trx" "TestResults\\API\\*.trx"
+            '''
+
+            junit testResults: 'TestResults/**/*.xml', testDataPublishers: [[$class: 'AttachmentPublisher']]
         }
     }
 }
