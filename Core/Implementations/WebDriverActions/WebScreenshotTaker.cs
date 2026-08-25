@@ -35,6 +35,7 @@ public sealed class WebScreenshotTaker
     private static string GetScreenshotFileName(string name)
     {
         var now = DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss-fff");
-        return $"{now}_{name}";
+        var fileName = FileNameSanitizer.Sanitize($"{now}_{name}");
+        return fileName;
     }
 }
