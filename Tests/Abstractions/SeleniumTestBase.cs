@@ -1,7 +1,5 @@
 using Business;
 using Core;
-using log4net.Appender;
-using log4net.Repository.Hierarchy;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework.Interfaces;
 
@@ -22,13 +20,11 @@ public abstract class SeleniumTestBase
     [TearDown]
     public override void TearDown()
     {
-        HandleScreenshot();
-        HandleLogs();
-
+        HandleScreenshotAttachment();
         base.TearDown();
     }
 
-    private void HandleScreenshot()
+    private void HandleScreenshotAttachment()
     {
         if (TestContext.CurrentContext.Result.Outcome.Status != TestStatus.Failed)
         {
@@ -38,31 +34,5 @@ public abstract class SeleniumTestBase
         var path = ScreenshotTaker.TakeScreenshot(TestContext.CurrentContext.Test.FullName);
         TestContext.AddTestAttachment(path, "Failure screenshot");
         TestContext.Out.WriteLine($"[[ATTACHMENT|{path}]]");
-    }
-
-    private void HandleLogs()
-    {
-        var hierarchy = (Hierarchy?)Log.Logger.Repository;
-        if (hierarchy == null)
-        {
-            return;
-        }
-
-        foreach (IAppender appender in hierarchy.GetAppenders())
-        {
-            if (appender is not FileAppender fileAppender)
-            {
-                continue;
-            }
-
-            string? path = fileAppender.File;
-            if (string.IsNullOrWhiteSpace(path))
-            {
-                continue;
-            }
-
-            TestContext.AddTestAttachment(path, "Test log");
-            TestContext.Out.WriteLine($"[[ATTACHMENT|{path}]]");
-        }
     }
 }
