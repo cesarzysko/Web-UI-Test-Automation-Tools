@@ -17,12 +17,13 @@ public sealed class WebScreenshotTaker
 
     private static ILog Log => LogManager.GetLogger(typeof(WebScreenshotTaker));
 
-    void IScreenshotTaker.TakeScreenshot(string name)
+    string IScreenshotTaker.TakeScreenshot(string name)
     {
         var screenshot = ((ITakesScreenshot)Driver).GetScreenshot();
         var filePath = GetScreenshotPath(name);
         Log.InfoFormat("Saving screenshot at \"{0}\".", filePath);
         screenshot.SaveAsFile(filePath);
+        return filePath;
     }
 
     private string GetScreenshotPath(string name)
@@ -33,7 +34,7 @@ public sealed class WebScreenshotTaker
 
     private static string GetScreenshotFileName(string name)
     {
-        var now = DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss-fff");
-        return $"{now}_{name}";
+        var fileName = FileNameSanitizer.Sanitize($"{name}__{DateTime.Now:yyyy-MM-dd__HH-mm-ss-fff}");
+        return fileName;
     }
 }

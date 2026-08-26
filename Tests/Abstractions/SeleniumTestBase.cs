@@ -20,11 +20,19 @@ public abstract class SeleniumTestBase
     [TearDown]
     public override void TearDown()
     {
-        if (TestContext.CurrentContext.Result.Outcome.Status == TestStatus.Failed)
+        HandleScreenshotAttachment();
+        base.TearDown();
+    }
+
+    private void HandleScreenshotAttachment()
+    {
+        if (TestContext.CurrentContext.Result.Outcome.Status != TestStatus.Failed)
         {
-            ScreenshotTaker.TakeScreenshot(TestContext.CurrentContext.Test.FullName);
+            return;
         }
 
-        base.TearDown();
+        var path = ScreenshotTaker.TakeScreenshot(TestContext.CurrentContext.Test.FullName);
+        TestContext.AddTestAttachment(path, "Failure screenshot");
+        TestContext.Out.WriteLine($"[[ATTACHMENT|{path}]]");
     }
 }

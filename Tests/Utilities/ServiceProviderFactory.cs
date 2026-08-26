@@ -29,6 +29,7 @@ public static class ServiceProviderFactory
     {
         sc.AddScoped<IDownloadPathGetter, DownloadPathGetter>();
         sc.AddScoped<IWebDriverFactory, ChromeDriverFactory>();
+        sc.AddScoped<IWebDriverFactory, FirefoxDriverFactory>();
         sc.AddScoped<IBrowserFactory, BrowserFactory>();
         sc.AddScoped<IWebDriver>(sp => sp.GetRequiredService<IBrowserFactory>().CreateDriver());
         sc.AddTransient<IElementFinder, WebElementFinder>();

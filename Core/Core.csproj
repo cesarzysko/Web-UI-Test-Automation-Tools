@@ -10,11 +10,13 @@
       <PackageReference Include="log4net" Version="3.3.2" />
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.9" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.9" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.9" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.9" />
       <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.9" />
       <PackageReference Include="RestSharp" Version="114.0.0" />
       <PackageReference Include="Selenium.WebDriver" Version="4.46.0" />
       <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="150.0.7871.11500" />
+      <PackageReference Include="Selenium.WebDriver.GeckoDriver" Version="0.37.1" />
     </ItemGroup>
 
     <ItemGroup>

@@ -9,7 +9,7 @@ public sealed class BrowserFactory
 
     public BrowserFactory(IEnumerable<IWebDriverFactory> webDriverFactories, IConfig config)
     {
-        Factory = webDriverFactories.First(f => f.Browser == config.Data.Browser);
+        Factory = webDriverFactories.Single(f => f.Browser == config.Data.Browser);
     }
 
     public IWebDriver CreateDriver()
